@@ -1,0 +1,89 @@
+---
+services:
+  kimai:
+    image: lscr.io/linuxserver/kimai:${KIMAI_VERSION}
+    container_name: kimai
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_started
+        required: true
+        restart: true
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mariadb:${MYSQL_PORT}/${MYSQL_DATABASE}?charset=${CHARSET}&serverVersion=${SERVER_VERSION}
+    hostname: kimai
+    networks:
+      kimai_network: null
+    ports:
+      - name: web (http)
+        target: 80
+        published: ${HTTP_PORT}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+      - name: web (https)
+        target: 443
+        published: ${HTTPS_PORT}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: https
+        mode: host
+    volumes:
+      - type: volume
+        source: kimai_config
+        target: /config
+        read_only: false
+        volume:
+          nocopy: false
+
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:${MARIADB_VERSION}
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    hostname: mariadb
+    networks:
+      kimai_network: null
+    ports:
+      - name: mysql
+        target: 3306
+        published: ${MYSQL_PORT}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: mysql
+        mode: host
+    volumes:
+      - type: volume
+        source: mariadb_config
+        target: /config
+        read_only: false
+        volume:
+          nocopy: false
+
+networks:
+  kimai_network:
+    name: kimai-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+volumes:
+  kimai_config:
+    name: kimai-config
+    external: false
+  mariadb_config:
+    name: mariadb-config
+    external: false
