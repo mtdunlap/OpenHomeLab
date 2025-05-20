@@ -1,20 +1,22 @@
 ---
 services:
-  kimai:
+  kimai_web:
     image: lscr.io/linuxserver/kimai:${KIMAI_VERSION}
-    container_name: kimai
+    container_name: kimai-web
     restart: unless-stopped
     depends_on:
-      mariadb:
+      kimai_db:
         condition: service_started
         required: true
         restart: true
+    secrets:
+      - connection_string
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mariadb:${MYSQL_PORT}/${MYSQL_DATABASE}?charset=${CHARSET}&serverVersion=${SERVER_VERSION}
-    hostname: kimai
+      FILE__DATABASE_URL: /run/secrets/connection_string
+    hostname: kimai-web
     networks:
       kimai_network: null
     ports:
@@ -34,32 +36,35 @@ services:
         mode: host
     volumes:
       - type: volume
-        source: kimai_config
+        source: kimai_web_config
         target: /config
         read_only: false
         volume:
           nocopy: false
 
-  mariadb:
+  kimai_db:
     image: lscr.io/linuxserver/mariadb:${MARIADB_VERSION}
-    container_name: mariadb
+    container_name: kimai-db
     restart: unless-stopped
+    secrets:
+      - root_password
+      - user_password
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      FILE__MYSQL_ROOT_PASSWORD: /run/secrets/root_password
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      FILE__MYSQL_PASSWORD: /run/secrets/user_password
     expose:
       - ${MYSQL_PORT}
-    hostname: mariadb
+    hostname: kimai-db
     networks:
       kimai_network: null
     volumes:
       - type: volume
-        source: mariadb_config
+        source: kimai_db_config
         target: /config
         read_only: false
         volume:
@@ -74,10 +79,18 @@ networks:
     enable_ipv4: true
     enable_ipv6: false
 
+secrets:
+  connection_string:
+    file: connection_string.secret
+  root_password:
+    file: root_password.secret
+  user_password:
+    file: user_password.secret
+
 volumes:
-  kimai_config:
-    name: kimai-config
+  kimai_web_config:
+    name: kimai-web-config
     external: false
-  mariadb_config:
-    name: mariadb-config
+  kimai_db_config:
+    name: kimai-db-config
     external: false
