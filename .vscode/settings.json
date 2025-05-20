@@ -8,6 +8,11 @@
   ],
   "editor.tabSize": 4,
   "editor.trimAutoWhitespace": true,
+  "files.associations": {
+    "*.env": "plaintext",
+    "*.secret": "plaintext",
+    "*.template": "plaintext"
+  },
   "files.eol": "auto",
   "files.encoding": "utf8",
   "files.insertFinalNewline": true,
@@ -29,6 +34,11 @@
     "editor.unicodeHighlight.ambiguousCharacters": false,
     "editor.unicodeHighlight.invisibleCharacters": false,
     "editor.wordWrap": "on"
+  },
+  "[plaintext]": {
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "files.insertFinalNewline": false
   },
   "[xml]": {
     "editor.tabSize": 2
