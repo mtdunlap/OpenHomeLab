@@ -52,17 +52,11 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    expose:
+      - ${MYSQL_PORT}
     hostname: mariadb
     networks:
       kimai_network: null
-    ports:
-      - name: mysql
-        target: 3306
-        published: ${MYSQL_PORT}
-        host_ip: 0.0.0.0
-        protocol: tcp
-        app_protocol: mysql
-        mode: host
     volumes:
       - type: volume
         source: mariadb_config
