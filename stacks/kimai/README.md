@@ -31,6 +31,8 @@ After starting the service for the first time add a user.
 docker exec -it kimai-web console kimai:user:create <username> <email> ROLE_SUPER_ADMIN
 ```
 
+Afterwards, you will be prompted to enter a password. Login to kimai and follow the setup wizard.
+
 
 ## Documentation
 
