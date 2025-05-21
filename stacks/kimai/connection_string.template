@@ -1,0 +1,1 @@
+mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@kimai-db:${MYSQL_PORT}/${MYSQL_DATABASE}?charset=${CHARSET}&serverVersion=${SERVER_VERSION}
