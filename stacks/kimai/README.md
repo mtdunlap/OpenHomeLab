@@ -9,7 +9,7 @@ Make a copy of each of the `.template` files and remove the `.template` extensio
 
 ### Exposing the database
 
-To expose the database via the host machine add the following ports definition to `compose.yaml` under the `kimai_db` service.
+To expose the database via the host machine add the following ports definition to `compose.yaml` under the `kimai_db` service and remove the `expose` definition.
 
 ```yaml
 ports:
