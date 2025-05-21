@@ -1,0 +1,63 @@
+---
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:10.10.7@sha256:a5fb220ce06edb8ef056a8e2a88bc04a6608d1cb7d49b7002ff4c858945566ad
+    container_name: jellyfin
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    hostname: jellyfin
+    networks:
+      jellyfin_network: null
+    ports:
+      - name: web (http)
+        target: 8096
+        published: ${HTTP_PORT}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+      - name: web (https)
+        target: 8920
+        published: ${HTTPS_PORT}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: https
+        mode: host
+      - name: client discovery
+        target: 7359
+        published: "7359"
+        host_ip: 0.0.0.0
+        protocol: udp
+        app_protocol: http
+        mode: host
+      - name: service discovery
+        target: 1900
+        published: "1900"
+        host_ip: 0.0.0.0
+        protocol: udp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: jellyfin_config
+        target: /config
+        read_only: false
+        volume:
+          nocopy: false
+
+networks:
+  jellyfin_network:
+    name: jellyfin-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+volumes:
+  jellyfin_config:
+    name: jellyfin-config
+    external: false
