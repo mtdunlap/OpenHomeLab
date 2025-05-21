@@ -2,19 +2,14 @@
 
 [Kimai][kimai_homepage] is a professional grade time-tracking application, free and [open-source][kimai_source_code]. It handles use-cases of freelancers as well as companies with dozens or hundreds of users.
 
+## Configuration
 
-## Setup
-
-After starting the service for the first time add a user.
-
-```bash
-docker exec -it kimai console kimai:user:create <username> <email> ROLE_SUPER_ADMIN
-```
+Make a copy of each of the `.template` files and remove the `.template` extension. Change any of the parameters as you see fit. Be sure to update the `connection_string.template` to use the same values as the environment variables set in the `.env` file.
 
 
-## Exposing the database
+### Exposing the database
 
-To expose the database to via the host machine add the following ports definition to `compose.yaml` under the `mariadb` service.
+To expose the database via the host machine add the following ports definition to `compose.yaml` under the `kimai_db` service.
 
 ```yaml
 ports:
@@ -28,9 +23,18 @@ ports:
 ```
 
 
+## Setup
+
+After starting the service for the first time add a user.
+
+```bash
+docker exec -it kimai-web console kimai:user:create <username> <email> ROLE_SUPER_ADMIN
+```
+
+
 ## Documentation
 
-Please view the [kimai documentation][kimai_documentation].
+For further information on Kimai please view the [kimai documentation][kimai_documentation].
 
 
 ## Linuxserver.io
