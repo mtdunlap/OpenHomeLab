@@ -9,9 +9,10 @@
   "editor.tabSize": 4,
   "editor.trimAutoWhitespace": true,
   "files.associations": {
-    "*.env": "plaintext",
+    "*.env": "properties",
+    "*.env.template": "properties",
     "*.secret": "plaintext",
-    "*.template": "plaintext"
+    "*.secret.template": "plaintext"
   },
   "files.eol": "auto",
   "files.encoding": "utf8",
