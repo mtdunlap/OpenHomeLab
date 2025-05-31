@@ -5,8 +5,16 @@ Free and Open Source (FOSS) software stacks run via docker compose.
 | Name | Use Case | Source | License |
 | :--- | :--- | :--- | :--- |
 | [Heimdall][heimdall_homepage] | Dashboard | [Heimdall source code][heimdall_source_code] | [`MIT`][mit_license] |
+| [Immich][immich_homepage] | Content Management System | [Immich source code][immich_source_code] | [`AGPLv3`][agplv3] |
 | [Kimai][kimai_homepage] | Time Tracking | [Kimai source code][kimai_source_code] | [`AGPLv3`][agplv3] |
 | [RomM][romm_homepage] | Gaming | [RomM source code][romm_source_code] | [`AGPLv3`][agplv3] |
+
+
+## Content Management System
+
+Software stacks used for content management.
+
+- [Immich][immich_stack]
 
 
 ## Dashboard
@@ -35,6 +43,9 @@ Software stacks used for time tracking.
 [heimdall_homepage]: <https://heimdall.site/> "heimdall homepage"
 [heimdall_source_code]: <https://github.com/linuxserver/Heimdall> "heimdall source code"
 [heimdall_stack]: <./heimdall> "heimdall stack"
+[immich_homepage]: <https://immich.app/> "immich homepage"
+[immich_source_code]: <https://github.com/immich-app/immich/> "immich source code"
+[immich_stack]: <./immich> "immich stack"
 [kimai_homepage]: <https://www.kimai.org/> "kimai homepage"
 [kimai_source_code]: <https://github.com/kimai/kimai> "kimai source code"
 [kimai_stack]: <./kimai> "kimai stack"
