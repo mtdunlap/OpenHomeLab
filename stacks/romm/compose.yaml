@@ -1,0 +1,117 @@
+---
+name: romm
+
+services:
+  romm-web:
+    image: rommapp/romm:${ROMM_VERSION:-latest}
+    container_name: romm-web
+    restart: unless-stopped
+    depends_on:
+      romm-db:
+        condition: service_healthy
+        restart: true
+    secrets:
+      - romm_db_user_password
+      - romm_auth_secret_key
+      - igdb_client_id
+      - igdb_client_secret
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWD_FILE: /run/secrets/romm_db_user_password
+      ROMM_AUTH_SECRET_KEY_FILE: /run/secrets/romm_auth_secret_key
+      IGDB_CLIENT_ID_FILE: /run/secrets/igdb_client_id
+      IGDB_CLIENT_SECRET_FILE: /run/secrets/igdb_client_secret
+    hostname: romm-web
+    networks:
+      romm-network: null
+    ports:
+      - name: web (http)
+        target: 8080
+        published: ${HTTP_PORT:-80}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: romm_resources
+        target: /romm/resources
+        read_only: false
+      - type: volume
+        source: romm_redis_data
+        target: /redis-data
+        read_only: false
+      - type: bind
+        source: ${LIBRARY}
+        target: /romm/library
+        read_only: false
+      - type: bind
+        source: ${ASSETS}
+        target: /romm/assets
+        read_only: false
+      - type: bind
+        source: ${CONFIG}/config.yaml
+        target: /romm/config/config.yml
+        read_only: false
+
+  romm-db:
+    image: mariadb:${MARIADB_VERSION:-latest}
+    container_name: romm-db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s
+      start_interval: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    secrets:
+      - romm_db_root_password
+      - romm_db_user_password
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/romm_db_root_password
+      MARIADB_DATABASE: ${DB_NAME:-romm}
+      MARIADB_USER: ${DB_USER:-romm-user}
+      MARIADB_PASSWORD_FILE: /run/secrets/romm_db_user_password
+    hostname: romm-db
+    networks:
+      romm-network: null
+    volumes:
+      - type: volume
+        source: romm_db_data
+        target: /var/lib/mysql
+        read_only: false
+
+networks:
+  romm-network:
+    name: romm-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+secrets:
+  romm_auth_secret_key:
+    file: romm_auth_secret_key.secret
+  igdb_client_id:
+    file: igdb_client_id.secret
+  igdb_client_secret:
+    file: igdb_client_secret.secret
+  romm_db_root_password:
+    file: romm_db_root_password.secret
+  romm_db_user_password:
+    file: romm_db_user_password.secret
+
+volumes:
+  romm_db_data:
+    name: romm-db-data
+    external: false
+  romm_resources:
+    name: romm-resources
+    external: false
+  romm_redis_data:
+    name: romm-redis-data
+    external: false
