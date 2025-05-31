@@ -1,21 +1,9 @@
-#
-# WARNING: To install Immich, follow our guide: https://immich.app/docs/install/docker-compose
-#
-# Make sure to use the docker-compose.yml of the current release:
-#
-# https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
-#
-# The compose file on main may not be compatible with the latest release.
-
 name: immich
 
 services:
   immich-server:
     container_name: immich-server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    # extends:
-    #   file: hwaccel.transcoding.yml
-    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     restart: unless-stopped
     depends_on:
       redis:
@@ -28,23 +16,29 @@ services:
         restart: true
     healthcheck:
       disable: false
-    env_file:
-      - path: ./.env
-        required: true
+    secrets:
+      - database-password
+    environment:
+      TZ: ${TZ:-Etc/UTC}
+      DB_HOSTNAME: ${DB_HOSTNAME:-database}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_DATABASE_NAME: ${DB_DATABASE_NAME:-immich}
+      DB_PASSWORD_FILE: /run/secrets/database-password
     hostname: immich-server
     networks:
-      immich_network: null
+      immich-network: null
     ports:
       - name: web (http)
         target: 2283
-        published: "2283"
+        published: ${HTTP_PORT:-2283}
         host_ip: 0.0.0.0
         protocol: tcp
         app_protocol: http
         mode: host
     volumes:
       - type: bind
-        source: ${UPLOAD_LOCATION} # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
+        source: ${UPLOAD_LOCATION}
         target: /usr/src/app/upload
         read_only: false
       - type: bind
@@ -54,21 +48,13 @@ services:
 
   immich-machine-learning:
     container_name: immich-machine-learning
-    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
-    # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
-    #   file: hwaccel.ml.yml
-    #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     restart: unless-stopped
     healthcheck:
       disable: false
-    env_file:
-      - path: ./.env
-        required: true
     hostname: immich-machine-learning
     networks:
-      immich_network: null
+      immich-network: null
     volumes:
       - type: volume
         source: model-cache
@@ -79,34 +65,37 @@ services:
     container_name: immich-redis
     image: docker.io/valkey/valkey:8-bookworm@sha256:ff21bc0f8194dc9c105b769aeabf9585fea6a8ed649c0781caeac5cb3c247884
     restart: unless-stopped
-    hostname: immich-redis
-    networks:
-      immich_network: null
     healthcheck:
       test: redis-cli ping || exit 1
+    hostname: immich-redis
+    networks:
+      immich-network: null
 
   database:
     container_name: immich-postgres
     image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0@sha256:fa4f6e0971f454cd95fec5a9aaed2ed93d8f46725cc6bc61e0698e97dba96da1
     restart: unless-stopped
+    secrets:
+      - database-password
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_DATABASE_NAME}
-      POSTGRES_INITDB_ARGS: '--data-checksums'
-      # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
-      # DB_STORAGE_TYPE: 'HDD'
+      POSTGRES_PASSWORD_FILE: /run/secrets/database-password
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_DB: ${DB_DATABASE_NAME:-immich}
+      POSTGRES_INITDB_ARGS: --data-checksums
+      DB_STORAGE_TYPE: HDD
+    expose:
+      - ${DB_PORT:-5432}
     hostname: immich-postgres
     networks:
-      immich_network: null
+      immich-network: null
     volumes:
       - type: bind
-        source: ${DB_DATA_LOCATION} # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
+        source: ${DB_DATA_LOCATION}
         target: /var/lib/postgresql/data
         read_only: false
 
 networks:
-  immich_network:
+  immich-network:
     name: immich-network
     driver: bridge
     external: false
@@ -114,7 +103,11 @@ networks:
     enable_ipv4: true
     enable_ipv6: false
 
+secrets:
+  database-password:
+    file: database_password.secret
+
 volumes:
   model-cache:
-    name: "model-cache"
+    name: model-cache
     external: false
