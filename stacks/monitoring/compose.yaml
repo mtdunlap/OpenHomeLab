@@ -188,6 +188,42 @@ services:
         target: /data/loki
         read_only: false
 
+  uptime-kuma:
+    image: louislam/uptime-kuma:${UPTIME_KUMA_VERSION:-latest}
+    container_name: monitoring-uptime-kuma
+    restart: unless-stopped
+    depends_on:
+      loki:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      disable: false
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+      start_interval: 5s
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+    hostname: monitoring-uptime-kuma
+    networks:
+      monitoring-network: null
+    ports:
+      - name: uptime-kuma web (http)
+        target: 3001
+        published: ${UPTIME_KUMA_HTTP_PORT:-3001}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: monitoring-uptime-kuma-data
+        target: /app/data
+        read_only: false
+
   grafana:
     image: grafana/grafana:${GRAFANA_VERSION:-latest}
     container_name: monitoring-grafana
@@ -264,4 +300,7 @@ volumes:
     external: false
   monitoring-loki-data:
     name: monitoring-loki-data
+    external: false
+  monitoring-uptime-kuma-data:
+    name: monitoring-uptime-kuma-data
     external: false
