@@ -1,0 +1,45 @@
+---
+name: monitoring
+
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:${CADVISOR_VERSION:-latest}
+    container_name: monitoring-cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg
+    hostname: monitoring-cadvisor
+    ports:
+      - name: web (http)
+        target: 8080
+        published: ${CADVISOR_HTTP_PORT:-8080}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: bind
+        source: /
+        target: /rootfs
+        read_only: true
+      - type: bind
+        source: /var/run
+        target: /var/run
+        read_only: true
+      - type: bind
+        source: /sys
+        target: /sys
+        read_only: true
+      - type: bind
+        source: /var/lib/docker
+        target: /var/lib/docker
+        read_only: true
+      - type: bind
+        source: /dev/disk
+        target: /dev/disk
+        read_only: true
+      - type: bind
+        source: /etc/machine-id
+        target: /etc/machine-id
+        read_only: true
