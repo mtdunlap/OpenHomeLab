@@ -66,6 +66,10 @@ services:
         source: ./prometheus.yaml
         target: /etc/prometheus/prometheus.yml
         read_only: false
+      - type: volume
+        source: monitoring-prometheus-data
+        target: /prometheus
+        read_only: false
 
   grafana:
     image: grafana/grafana:${GRAFANA_VERSION:-latest}
@@ -110,4 +114,7 @@ networks:
 volumes:
   monitoring-grafana-data:
     name: monitoring-grafana-data
+    external: false
+  monitoring-prometheus-data:
+    name: monitoring-prometheus-data
     external: false
