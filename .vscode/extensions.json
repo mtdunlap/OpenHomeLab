@@ -1,6 +1,12 @@
 {
     "recommendations": [
-        "ms-azuretools.vscode-containers"
+        "ms-azuretools.vscode-containers",
+        "bierner.markdown-checkbox",
+        "bierner.markdown-emoji",
+        "bierner.markdown-footnotes",
+        "bierner.markdown-mermaid",
+        "bierner.markdown-preview-github-styles",
+        "bierner.markdown-yaml-preamble",
     ],
     "unwantedRecommendations": []
 }
