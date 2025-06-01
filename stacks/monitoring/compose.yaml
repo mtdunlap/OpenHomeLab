@@ -54,7 +54,7 @@ services:
     networks:
       monitoring-network: null
     ports:
-      - name: web (http)
+      - name: prometheus web (http)
         target: 9090
         published: ${PROMETHEUS_HTTP_PORT:-9090}
         host_ip: 0.0.0.0
