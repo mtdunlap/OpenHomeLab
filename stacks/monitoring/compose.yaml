@@ -46,6 +46,24 @@ services:
         target: /etc/machine-id
         read_only: true
 
+  node_exporter:
+    image: prom/node-exporter:${NODE_EXPORTER_VERSION:-latest}
+    container_name: node_exporter
+    restart: unless-stopped
+    command:
+      - --path.rootfs=/host
+    pid: host
+    hostname: monitoring-node-exporter
+    networks:
+      monitoring-network: null
+    volumes:
+      - type: bind
+        source: /
+        target: /host
+        read_only: true
+        bind:
+          propagation: rslave
+
   prometheus:
     image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
     container_name: monitoring-prometheus
