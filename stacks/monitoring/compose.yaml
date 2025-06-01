@@ -70,6 +70,13 @@ services:
     image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
     container_name: monitoring-prometheus
     restart: unless-stopped
+    depends_on:
+      cadvisor:
+        condition: service_healthy
+        restart: true
+      node-exporter:
+        condition: service_started
+        restart: true
     hostname: monitoring-prometheus
     networks:
       monitoring-network: null
@@ -122,6 +129,10 @@ services:
     image: grafana/grafana:${GRAFANA_VERSION:-latest}
     container_name: monitoring-grafana
     restart: unless-stopped
+    depends_on:
+      prometheus:
+        condition: service_started
+        restart: true
     environment:
       GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: true
       GF_AUTH_ANONYMOUS_ENABLED: true
