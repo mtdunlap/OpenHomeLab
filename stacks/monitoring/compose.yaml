@@ -48,9 +48,9 @@ services:
         target: /etc/machine-id
         read_only: true
 
-  node_exporter:
+  node-exporter:
     image: prom/node-exporter:${NODE_EXPORTER_VERSION:-latest}
-    container_name: node_exporter
+    container_name: monitoring-node-exporter
     restart: unless-stopped
     command:
       - --path.rootfs=/host
