@@ -1,0 +1,144 @@
+name: paperless-ngx
+
+services:
+  broker:
+    image: docker.io/library/redis:${REDIS_VERSION:-8}
+    restart: unless-stopped
+    expose:
+      - "6379"
+    hostname: paperless-ngx-broker
+    networks:
+      paperless-ngx-network: null
+    volumes:
+      - type: volume
+        source: redisdata
+        target: /data
+        read_only: false
+
+  db:
+    image: docker.io/library/postgres:${POSTGRES_VERSION:-17}
+    restart: unless-stopped
+    secrets:
+      - database-password
+    environment:
+      POSTGRES_DB: ${PAPERLESS_DB_NAME:-paperless}
+      POSTGRES_USER: ${PAPERLESS_DB_USER:-paperless}
+      POSTGRES_PASSWORD_FILE: /run/secrets/database-password
+    hostname: paperless-ngx-db
+    networks:
+      paperless-ngx-network: null
+    volumes:
+      - type: volume
+        source: pgdata
+        target: /var/lib/postgresql/data
+        read_only: false
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_VERSION:-latest}
+    restart: unless-stopped
+    depends_on:
+      broker:
+        condition: service_started
+        required: true
+        restart: true
+      db:
+        condition: service_started
+        required: true
+        restart: true
+      gotenberg:
+        condition: service_started
+        required: true
+        restart: true
+      tika:
+        condition: service_started
+        required: true
+        restart: true
+    secrets:
+      - database-password
+    environment:
+      USERMAP_UID: ${USERMAP_UID:-1000}
+      USERMAP_GID: ${USERMAP_GID:-1000}
+      PAPERLESS_TIME_ZONE: ${PAPERLESS_TIME_ZONE:-Etc/UTC}
+      PAPERLESS_OCR_LANGUAGE: ${PAPERLESS_OCR_LANGUAGE:-eng}
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_DBNAME: ${PAPERLESS_DB_NAME:-paperless}
+      PAPERLESS_DBUSER: ${PAPERLESS_DB_USER:-paperless}
+      PAPERLESS_DBPASS_FILE: /run/secrets/database-password
+      PAPERLESS_DBPORT: 5432
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+    hostname: paperless-ngx-web
+    networks:
+      paperless-ngx-network: null
+    ports:
+      - name: web (http)
+        target: 8000
+        published: ${HTTP_PORT:-8000}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: data
+        target: /usr/src/paperless/data
+        read_only: false
+      - type: volume
+        source: media
+        target: /usr/src/paperless/media
+        read_only: false
+      - type: bind
+        source: ${PAPERLESS_EXPORT_PATH:-./export}
+        target: /usr/src/paperless/export
+        read_only: false
+      - type: bind
+        source: ${PAPERLESS_CONSUME_PATH:-./consume}
+        target: /usr/src/paperless/consume
+        read_only: false
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:${GOTENBERG_VERSION:-8.20}
+    restart: unless-stopped
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+    expose:
+      - "3000"
+    hostname: paperless-ngx-gotenberg
+    networks:
+      paperless-ngx-network: null
+
+  tika:
+    image: docker.io/apache/tika:${TIKA_VERSION:-latest}
+    restart: unless-stopped
+    expose:
+      - "9998"
+    hostname: paperless-ngx-tika
+    networks:
+      paperless-ngx-network: null
+
+networks:
+  paperless-ngx-network:
+    name: paperless-ngx-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+secrets:
+  database-password:
+    file: database_password.secret
+
+volumes:
+  data:
+    name: paperless-ngx-data
+  media:
+    name: paperless-ngx-media
+  pgdata:
+    name: paperless-ngx-pgdata
+  redisdata:
+    name: paperless-ngx-redisdata
