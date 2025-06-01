@@ -10,6 +10,8 @@ services:
     devices:
       - /dev/kmsg
     hostname: monitoring-cadvisor
+    networks:
+      monitoring-network: null
     ports:
       - name: web (http)
         target: 8080
@@ -43,3 +45,33 @@ services:
         source: /etc/machine-id
         target: /etc/machine-id
         read_only: true
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
+    container_name: monitoring-prometheus
+    restart: unless-stopped
+    hostname: monitoring-prometheus
+    networks:
+      monitoring-network: null
+    ports:
+      - name: web (http)
+        target: 9090
+        published: ${PROMETHEUS_HTTP_PORT:-9090}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: bind
+        source: ./prometheus.yaml
+        target: /etc/prometheus/prometheus.yml
+        read_only: false
+
+networks:
+  monitoring-network:
+    name: monitoring-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
