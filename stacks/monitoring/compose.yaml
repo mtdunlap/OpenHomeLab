@@ -183,8 +183,16 @@ services:
         mode: host
     volumes:
       - type: bind
-        source: ./grafana.yaml
+        source: ./grafana/datasources.yaml
         target: /etc/grafana/provisioning/datasources/datasource.yaml
+        read_only: false
+      - type: bind
+        source: ./grafana/dashboards.yaml
+        target: /etc/grafana/provisioning/dashboards/dashboard.yaml
+        read_only: false
+      - type: bind
+        source: ./grafana/dashboards
+        target: /var/lib/grafana/dashboards
         read_only: false
       - type: volume
         source: monitoring-grafana-data
