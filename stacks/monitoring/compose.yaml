@@ -91,6 +91,33 @@ services:
         target: /prometheus
         read_only: false
 
+  loki:
+    image: grafana/loki:${LOKI_VERSION:-latest}
+    container_name: monitoring-loki
+    restart: unless-stopped
+    command:
+      - -config.file=/etc/loki/loki-config.yaml
+    hostname: monitoring-loki
+    networks:
+      monitoring-network: null
+    ports:
+      - name: loki web (http)
+        target: 3100
+        published: ${LOKI_HTTP_PORT:-3100}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: bind
+        source: ./loki.yaml
+        target: /etc/loki/loki-config.yaml
+        read_only: false
+      - type: volume
+        source: monitoring-loki-data
+        target: /data/loki
+        read_only: false
+
   grafana:
     image: grafana/grafana:${GRAFANA_VERSION:-latest}
     container_name: monitoring-grafana
@@ -137,4 +164,7 @@ volumes:
     external: false
   monitoring-prometheus-data:
     name: monitoring-prometheus-data
+    external: false
+  monitoring-loki-data:
+    name: monitoring-loki-data
     external: false
