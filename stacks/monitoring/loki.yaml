@@ -45,6 +45,7 @@ limits_config:
   ingestion_burst_size_mb: 16
   ingestion_rate_mb: 16
   allow_structured_metadata: false
+  volume_enabled: true
 
 table_manager:
   retention_deletes_enabled: false
@@ -61,3 +62,6 @@ ruler:
     kvstore:
       store: inmemory
   enable_api: true
+
+analytics:
+  reporting_enabled: false
