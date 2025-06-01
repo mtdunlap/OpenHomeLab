@@ -6,11 +6,19 @@ services:
     image: gcr.io/cadvisor/cadvisor:${CADVISOR_VERSION:-latest}
     container_name: monitoring-cadvisor
     restart: unless-stopped
+    depends_on:
+      loki:
+        condition: service_started
+        restart: true
     privileged: true
     command:
       - --docker_only=true
     devices:
       - /dev/kmsg
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
     hostname: monitoring-cadvisor
     networks:
       monitoring-network: null
@@ -52,9 +60,17 @@ services:
     image: prom/node-exporter:${NODE_EXPORTER_VERSION:-latest}
     container_name: monitoring-node-exporter
     restart: unless-stopped
+    depends_on:
+      loki:
+        condition: service_started
+        restart: true
     command:
       - --path.rootfs=/host
     pid: host
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
     hostname: monitoring-node-exporter
     networks:
       monitoring-network: null
@@ -77,6 +93,10 @@ services:
       node-exporter:
         condition: service_started
         restart: true
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
     hostname: monitoring-prometheus
     networks:
       monitoring-network: null
@@ -104,6 +124,10 @@ services:
     restart: unless-stopped
     command:
       - -config.file=/etc/loki/loki-config.yaml
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
     hostname: monitoring-loki
     networks:
       monitoring-network: null
@@ -133,6 +157,13 @@ services:
       prometheus:
         condition: service_started
         restart: true
+      loki:
+        condition: service_started
+        restart: true
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
     environment:
       GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: true
       GF_AUTH_ANONYMOUS_ENABLED: true
