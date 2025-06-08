@@ -9,7 +9,15 @@ Free and Open Source (FOSS) software stacks run via docker compose.
 | [Jellyfin][jellyfin_homepage] | Content Management System | [Jellyfin source code][jellyfin_source_code] | [`GPLv2`][gplv2] |
 | [Kimai][kimai_homepage] | Time Tracking | [Kimai source code][kimai_source_code] | [`AGPLv3`][agplv3] |
 | [Paperless-ngx][paperless_ngx_homepage] | Content Management System | [Paperless-ngx source code][paperless_ngx_source_code] | [`GPLv3`][gplv3] |
+| [Portainer][portainer_homepage] | Software Management System | [Portainer source code][portainer_source_code] | [`zlib`][zlib] |
 | [RomM][romm_homepage] | Gaming | [RomM source code][romm_source_code] | [`AGPLv3`][agplv3] |
+
+
+## Software Management System
+
+Software stacks used for managing software.
+
+- [Portainer][portainer_stack]
 
 
 ## Content Management System
@@ -61,7 +69,11 @@ Software stacks used for time tracking.
 [paperless_ngx_homepage]: <https://docs.paperless-ngx.com/> "paperless-ngx homepage"
 [paperless_ngx_source_code]: <https://github.com/paperless-ngx/paperless-ngx> "paperless-ngx source code"
 [paperless_ngx_stack]: <./paperless-ngx> "paperless-ngx stack"
+[portainer_homepage]: <https://www.portainer.io/> "portainer homepage"
+[portainer_source_code]: <https://github.com/portainer/portainer> "portainer source code"
+[portainer_stack]: <./portainer> "portainer stack"
 [mit_license]: <https://choosealicense.com/licenses/mit/> "MIT License"
 [romm_homepage]: <https://romm.app/> "romm homepage"
 [romm_source_code]: <https://github.com/rommapp/romm> "romm source code"
 [romm_stack]: <./romm> "romm stack"
+[zlib]: <https://choosealicense.com/licenses/zlib/> "Zlib License"
