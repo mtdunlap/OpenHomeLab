@@ -1,0 +1,41 @@
+---
+name: portainer
+
+services:
+  portainer:
+    image: portainer/portainer-ce:${VERSION:-lts}
+    container_name: portainer
+    restart: unless-stopped
+    hostname: portainer
+    networks:
+      portainer-network: null
+    ports:
+      - name: web ui (https)
+        target: 9443
+        published: ${WEB_UI_HTTPS_PORT:-9443}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: https
+        mode: host
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: false
+      - type: volume
+        source: portainer-data
+        target: /data
+        read_only: false
+
+networks:
+  portainer-network:
+    name: portainer-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+volumes:
+  portainer-data:
+    name: portainer-data
