@@ -21,13 +21,6 @@ services:
         protocol: tcp
         app_protocol: http
         mode: host
-      - name: click n' load
-        target: 9666
-        published: ${CLICK_N_LOAD_PORT:-9666}
-        host_ip: 0.0.0.0
-        protocol: tcp
-        app_protocol: http
-        mode: host
     volumes:
       - type: volume
         source: pyload-ng-config
