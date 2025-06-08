@@ -1,0 +1,53 @@
+---
+name: pyload-ng
+
+services:
+  pyload-ng:
+    image: lscr.io/linuxserver/pyload-ng:${VERSION:-latest}
+    container_name: pyload-ng
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-Etc/UTC}
+    hostname: pyload-ng
+    networks:
+      pyload-ng-network: null
+    ports:
+      - name: web (http)
+        target: 8000
+        published: ${HTTP_PORT:-8000}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+      - name: click n' load
+        target: 9666
+        published: ${CLICK_N_LOAD_PORT:-9666}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: pyload-ng-config
+        target: /config
+        read_only: false
+      - type: bind
+        source: ${DOWNLOAD_PATH}
+        target: /downloads
+        read_only: false
+
+networks:
+  pyload-ng-network:
+    name: pyload-ng-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+volumes:
+  pyload-ng-config:
+    name: pyload-ng-config
+    external: false
