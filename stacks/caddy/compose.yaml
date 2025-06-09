@@ -10,7 +10,6 @@ services:
     restart: unless-stopped
     environment:
       DUCKDNS_DOMAIN: ${DUCKDNS_DOMAIN}
-      DUCKDNS_RESOLVER: ${DUCKDNS_RESOLVER}
       DUCKDNS_TOKEN: ${DUCKDNS_TOKEN}
     hostname: caddy
     networks:
@@ -60,11 +59,7 @@ services:
 
 networks:
   caddy-network:
-    driver: bridge
-    external: false
-    internal: false
-    enable_ipv4: true
-    enable_ipv6: false
+    external: true
 
 volumes:
   caddy-config:
