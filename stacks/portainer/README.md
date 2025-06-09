@@ -1,6 +1,6 @@
 # Portainer
 
-High performance self-hosted photo and video management solution.
+Effortless container management for Kubernetes, Docker, and Podman.
 
 
 ## Configuration
