@@ -9,6 +9,7 @@
   "editor.tabSize": 4,
   "editor.trimAutoWhitespace": true,
   "files.associations": {
+    "Caddyfile": "plaintext",
     "*.env": "properties",
     "*.env.template": "properties",
     "*.secret": "plaintext",
