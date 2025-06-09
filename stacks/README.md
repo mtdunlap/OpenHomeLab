@@ -4,6 +4,7 @@ Free and Open Source (FOSS) software stacks run via docker compose.
 
 | Name | Use Case | Source | License |
 | :--- | :--- | :--- | :--- |
+| [Caddy][caddy_homepage] | Web Server | [Caddy source code][Caddy_source_code] | [`Apache 2.0`][apache_license_v2.0] |
 | [Heimdall][heimdall_homepage] | Dashboard | [Heimdall source code][heimdall_source_code] | [`MIT`][mit_license] |
 | [Immich][immich_homepage] | Content Management System | [Immich source code][immich_source_code] | [`AGPLv3`][agplv3] |
 | [Jellyfin][jellyfin_homepage] | Content Management System | [Jellyfin source code][jellyfin_source_code] | [`GPLv2`][gplv2] |
@@ -50,8 +51,18 @@ Software stacks used for time tracking.
 - [Kimai][kimai_stack]
 
 
+## Web Server
+
+Software stacks used for serving webpages.
+
+- [Caddy][caddy_stack]
+
 
 [agplv3]: <https://choosealicense.com/licenses/agpl-3.0/> "GNU AGPL v3.0"
+[apache_license_v2.0]: <https://choosealicense.com/licenses/apache-2.0/> "Apache License 2.0"
+[caddy_homepage]: <https://caddyserver.com/> "caddy homepage"
+[caddy_source_code]: <https://github.com/caddyserver/caddy> "caddy source code"
+[caddy_stack]: <./caddy> "caddy stack"
 [gplv2]: <https://choosealicense.com/licenses/gpl-2.0/> "GNU GPL v2.0"
 [gplv3]: <https://choosealicense.com/licenses/gpl-3.0/> "GNU GPL v3.0"
 [heimdall_homepage]: <https://heimdall.site/> "heimdall homepage"
