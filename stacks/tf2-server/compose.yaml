@@ -1,0 +1,75 @@
+---
+name: tf2-server
+
+services:
+  tf2:
+    image: cm2network/tf2:${VERSION:-latest-x64}${DIGEST:+@sha256:}${DIGEST}
+    container_name: tf2-server
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    cpus: 2
+    cpuset: 0-1
+    mem_limit: 8g
+    environment:
+      SRCDS_TOKEN: ${SRCDS_TOKEN?error}
+      SRCDS_PW: ${SRCDS_PW?error}
+      SRCDS_RCONPW: ${SRCDS_RCONPW?error}
+      SRCDS_PORT: ${SRCDS_PORT:-27015}
+      SRCDS_TV_PORT: ${SRCDS_TV_PORT:-27020}
+      SRCDS_IP: ${SRCDS_IP:-0}
+      SRCDS_FPSMAX: ${SRCDS_FPSMAX:-300}
+      SRCDS_TICKRATE: ${SRCDS_TICKRATE:-66}
+      SRCDS_MAXPLAYERS: ${SRCDS_MAXPLAYERS:-14}
+      SRCDS_REGION: ${SRCDS_REGION:--1}
+      SRCDS_STARTMAP: ${SRCDS_STARTMAP:-ctf_2fort}
+      SRCDS_HOSTNAME: ${SRCDS_HOSTNAME:-New TF Server}
+      SRCDS_WORKSHOP_AUTHKEY: ${SRCDS_WORKSHOP_AUTHKEY}
+      SRCDS_CFG: ${SRCDS_CFG:-server.cfg}
+      SRCDS_MAPCYCLE: ${SRCDS_MAPCYCLE:-mapcycle_default.txt}
+      SRCDS_SECURED: ${SRCDS_SECURED:-1}
+    hostname: tf2-server
+    networks:
+      tf2-server-network: null
+    ports:
+      - name: srcds
+        target: 27015
+        published: ${SRCDS_PORT:-27015}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+      - name: srcds tv
+        target: 27020
+        published: ${SRCDS_TV_PORT:-27020}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: tf2-server-data
+        target: /home/steam/tf-dedicated
+        read_only: false
+      - type: bind
+        source: ./server.cfg
+        target: /home/steam/tf-dedicated/tf/cfg/my_server.cfg
+        read_only: true
+      - type: bind
+        source: ./mapcycle.txt
+        target: /home/steam/tf-dedicated/tf/cfg/my_mapcycle.txt
+        read_only: true
+
+networks:
+  tf2-server-network:
+    name: tf2-server-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+volumes:
+  tf2-server-data:
+    name: tf2-server-data
+    external: false
