@@ -1,0 +1,92 @@
+---
+name: minecraft-server
+
+services:
+  minecraft-server:
+    image: itzg/minecraft-server:${JAVA_VERSION:-latest}${DIGEST:+@sha256:}${DIGEST}
+    container_name: minecraft-server
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    cpus: 1
+    cpuset: "0"
+    mem_limit: 8500m
+    secrets:
+      - source: ops
+        target: ops.json
+      - source: whitelist
+        target: whitelist.json
+    environment:
+      UID: ${UID:-1000}
+      GID: ${GID:-1000}
+      TZ: ${TZ:-Etc/UTC}
+      EULA: true
+      INIT_MEMORY: 4g
+      MAX_MEMORY: 8g
+      ENABLE_ROLLING_LOGS: true
+      VERSION: 1.21.5
+      TYPE: vanilla
+      MOTD: TNT's Minecraft Server
+      DIFFICULTY: hard
+      HARDCORE: false
+      MAX_PLAYERS: 10
+      MAX_WORLD_SIZE: 29_999_984
+      ALLOW_NETHER: true
+      VIEW_DISTANCE: 10
+      SIMULATION_DISTANCE: 10
+      #LEVEL_SEED:
+      SPAWN_PROTECTION: 16
+      MODE: survival
+      SPAWN_ANIMALS: true
+      SPAWN_MONSTERS: true
+      SPAWN_NPCS: true
+      PVP: false
+      LEVEL: world
+      ONLINE_MODE: true
+      ALLOW_FLIGHT: false
+      ANNOUNCE_PLAYER_ACHIEVEMENTS: true
+      ENABLE_COMMAND_BLOCK: false
+      FORCE_GAMEMODE: true
+      GENERATE_STRUCTURES: true
+      MAX_TICK_TIME: 60_000
+      PAUSE_WHEN_EMPTY_SECONDS: 60
+      PLAYER_IDLE_TIMEOUT: 0
+      LOG_IPS: true
+      WHITELIST_FILE: /run/secrets/whitelist.json
+      ENFORCE_WHITELIST: false
+      EXISTING_WHITELIST_FILE: SYNC_FILE_MERGE_LIST
+      OPS_FILE: /run/secrets/ops.json
+      EXISTING_OPS_FILE: SYNC_FILE_MERGE_LIST
+      ENABLE_RCON: false
+      ENABLE_QUERY: false
+    hostname: minecraft-server
+    networks:
+      minecraft-server-network: null
+    ports:
+      - name: game
+        target: 25565
+        published: ${GAME_PORT:-25565}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: tcp
+        mode: host
+    volumes:
+      - type: bind
+        source: ${MINECRAFT_DATA?error}
+        target: /data
+        read_only: false
+
+networks:
+  minecraft-server-network:
+    name: minecraft-server-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+
+secrets:
+  ops:
+    file: ./ops.secret
+  whitelist:
+    file: ./whitelist.secret
