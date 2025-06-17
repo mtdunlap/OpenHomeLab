@@ -12,6 +12,7 @@ Free and Open Source (FOSS) software stacks run via docker compose.
 | [Paperless-ngx][paperless_ngx_homepage] | Content Management System | [Paperless-ngx source code][paperless_ngx_source_code] | [`GPLv3`][gplv3] |
 | [Portainer][portainer_homepage] | Software Management System | [Portainer source code][portainer_source_code] | [`zlib`][zlib] |
 | [RomM][romm_homepage] | Gaming | [RomM source code][romm_source_code] | [`AGPLv3`][agplv3] |
+| [Wireguard Easy][wireguard_easy_homepage] | Virtual Private Network | [Wireguard Easy source code][wireguard_easy_source_code] | Various |
 
 
 ## Software Management System
@@ -51,6 +52,12 @@ Software stacks used for time tracking.
 - [Kimai][kimai_stack]
 
 
+## Virtual Private Network (VPN)
+
+Software stacks used for a virtual private network (vpn).
+
+- [Wireguard Easy][wireguard_easy_stack]
+
 ## Web Server
 
 Software stacks used for serving webpages.
@@ -87,4 +94,7 @@ Software stacks used for serving webpages.
 [romm_homepage]: <https://romm.app/> "romm homepage"
 [romm_source_code]: <https://github.com/rommapp/romm> "romm source code"
 [romm_stack]: <./romm> "romm stack"
+[wireguard_easy_homepage]: <https://wg-easy.github.io/wg-easy/v15.0/> "wireguard easy homepage"
+[wireguard_easy_source_code]: <https://github.com/wg-easy/wg-easy> "wireguard easy source code"
+[wireguard_easy_stack]: <./wireguard> "wireguard stack"
 [zlib]: <https://choosealicense.com/licenses/zlib/> "Zlib License"

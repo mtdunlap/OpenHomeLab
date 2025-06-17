@@ -1,0 +1,60 @@
+---
+name: wireguard
+
+x-environment:
+  wireguard-easy:
+    &wireguard-easy-environment
+    HOST: ${WIREGUARD_HOST:-0.0.0.0}
+    INSECURE: ${WIREGUARD_INSECURE:-false}
+
+services:
+  wireguard-easy:
+    image: ghcr.io/wg-easy/wg-easy${WIREGUARD_EASY_TAG:+:}${WIREGUARD_EASY_TAG}${WIREGUARD_EASY_DIGEST:+@}${WIREGUARD_EASY_DIGEST}
+    container_name: wireguard-easy
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+    environment:
+      <<: *wireguard-easy-environment
+    hostname: wireguard-easy
+    networks:
+      wireguard-network: null
+    expose:
+      - "51821"
+    ports:
+      - name: wireguard
+        target: 51820
+        published: ${WIREGUARD_VPN_PORT:-51820}
+        host_ip: 0.0.0.0
+        protocol: udp
+        app_protocol: idk
+        mode: host
+    volumes:
+      - type: volume
+        source: wireguard-config
+        target: /etc/wireguard
+        read_only: false
+      - type: bind
+        source: /lib/modules
+        target: /lib/modules
+        read_only: true
+
+networks:
+  wireguard-network:
+    name: wireguard-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+    attachable: false
+
+volumes:
+  wireguard-config:
+    name: wireguard-config
+    external: false
+...
