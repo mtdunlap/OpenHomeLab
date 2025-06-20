@@ -1,0 +1,97 @@
+---
+model: Lenovo ideapad 330S-15ARR
+type: laptop
+links:
+  - https://support.lenovo.com/us/en/solutions/pd500218-product-overview-330s-15arr
+hostname: singed
+hardware:
+  cpu:
+    name: AMD Ryzen 5 2500U
+    manufacturer: Advanced Micro Devices Inc
+    launch_date: 2017/10/26
+    links:
+      - https://www.amd.com/en/support/downloads/drivers.html/processors/ryzen/ryzen-2000-series/amd-ryzen-5-2500u.html
+    byte_order: little endian
+    op_modes:
+      32-bit: true
+      64-bit: true
+    family: 23
+    model: 17
+    cores: 4
+    threads: 8
+    clock:
+      base: 100_000_000
+      multiplier: 20
+      max_turbo: 3_600_000_000
+    cache:
+      L1d:
+        instances: 4
+        bytes: 131_072
+      L1i:
+        instances: 4
+        bytes: 262_144
+      L2:
+        instances: 4
+        bytes: 2_097_152
+      L3:
+        instances: 1
+        bytes: 4_194_304
+    tdp: 15
+  gpu:
+    name: Radeon Vega 8
+    memory: system shared
+    core: 8
+    clock:
+      base: 1_100_000_000
+  memory:
+    type: DDR4
+    channels: 2
+    ecc: false
+    registered: false
+    dimms:
+      - name: M471A5244CB0-CTD
+        manufacturer: Samsung
+        links:
+          - &M471A5244CB0-CTD https://semiconductor.samsung.com/dram/module/sodimm/m471a5244cb0-ctd/
+        locator: A
+        bytes: 4_294_967_296
+        speed: 2_400_000
+        rank: 1
+        voltage:
+          min: 1.2
+          max: 1.2
+      - name: M471A5244CB0-CTD
+        manufacturer: Samsung
+        links:
+          - *M471A5244CB0-CTD
+        locator: B
+        bytes: 4_294_967_296
+        speed: 2_400_000
+        rank: 1
+        voltage:
+          min: 1.2
+          max: 1.2
+  storage:
+    - name: HFS128G32TNF-N3A
+      manufacturer: Hynix
+      type: ssd
+      connectivity:
+        type: SATA
+        bits-per-second: 6_000_000_000
+      form-factor: 2.5
+      bytes: 128_035_676_160
+  networking:
+    - name: Qualcomm Atheros QCA9377
+      manufacturer: Qualcomm
+      wireless:
+        version: 802.11ac
+  screen:
+    type: LCD
+    size: 15.6
+  battery:
+    type: lithium polymer
+    manufacturer: Lenovo
+    watt-hours: 30
+  camera:
+    megapixels: 1.0
+    microphone: dual array
