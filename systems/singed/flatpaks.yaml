@@ -1,0 +1,18 @@
+---
+flatpaks:
+  - name: Brave
+    id: com.brave.Browser
+  - name: Discord
+    id: com.discordapp.Discord
+  - name: Flatseal
+    id: com.github.tchx84.Flatseal
+  - name: Jellyfin Media Player
+    id: com.github.iwalton3.jellyfin-media-player
+  - name: Librewolf
+    id: io.gitlab.librewolf-community
+  - name: Lutris
+    id: net.lutris.Lutris
+  - name: Steam
+    id: com.valvesoftware.Steam
+  - name: Warehouse
+    id: io.github.flattool.Warehouses
