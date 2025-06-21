@@ -8,8 +8,6 @@ flatpaks:
     id: com.github.tchx84.Flatseal
   - name: Jellyfin Media Player
     id: com.github.iwalton3.jellyfin-media-player
-  - name: Librewolf
-    id: io.gitlab.librewolf-community
   - name: Lutris
     id: net.lutris.Lutris
   - name: Steam

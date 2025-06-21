@@ -89,6 +89,7 @@
       vscodium
       podman-compose
       moonlight-qt
+      librewolf
     ];
   };
 
