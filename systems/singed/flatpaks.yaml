@@ -1,7 +1,5 @@
 ---
 flatpaks:
-  - name: Brave
-    id: com.brave.Browser
   - name: Discord
     id: com.discordapp.Discord
   - name: Flatseal
