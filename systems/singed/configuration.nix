@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
@@ -78,6 +78,11 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "steam"
+    "steam-unwrapped"
+  ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.mdunlap = {
     isNormalUser = true;
@@ -93,6 +98,17 @@
       chromium
       jellyfin-media-player
     ];
+  };
+
+  programs.steam = {
+    # Enable steam
+    enable = true;
+
+    # Open ports in the firewall for Steam Remote Play
+    remotePlay.openFirewall = false;
+
+    # Open ports in the firewall for Source Dedicated Server
+    dedicatedServer.openFirewall = false;
   };
 
   # Install firefox.

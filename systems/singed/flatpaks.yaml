@@ -6,7 +6,5 @@ flatpaks:
     id: com.github.tchx84.Flatseal
   - name: Lutris
     id: net.lutris.Lutris
-  - name: Steam
-    id: com.valvesoftware.Steam
   - name: Warehouse
     id: io.github.flattool.Warehouses
