@@ -91,6 +91,7 @@
       moonlight-qt
       librewolf
       chromium
+      jellyfin-media-player
     ];
   };
 
