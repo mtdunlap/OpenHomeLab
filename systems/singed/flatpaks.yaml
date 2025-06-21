@@ -12,8 +12,6 @@ flatpaks:
     id: io.gitlab.librewolf-community
   - name: Lutris
     id: net.lutris.Lutris
-  - name: Moonlight
-    id: com.moonlight_stream.Moonlight
   - name: Steam
     id: com.valvesoftware.Steam
   - name: Warehouse
