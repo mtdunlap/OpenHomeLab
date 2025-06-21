@@ -90,6 +90,7 @@
       podman-compose
       moonlight-qt
       librewolf
+      chromium
     ];
   };
 
