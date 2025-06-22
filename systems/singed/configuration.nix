@@ -79,6 +79,7 @@
   # services.xserver.libinput.enable = true;
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "discord"
     "steam"
     "steam-unwrapped"
   ];
@@ -97,6 +98,7 @@
       librewolf
       chromium
       jellyfin-media-player
+      discord
       (lutris.override {
         extraLibraries =  pkgs: [
           # List library dependencies here
