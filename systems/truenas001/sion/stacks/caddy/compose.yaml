@@ -46,7 +46,7 @@ services:
         mode: host
     volumes:
       - type: bind
-        source: ./Caddyfile
+        source: Caddyfile
         target: /etc/caddy/Caddyfile
         read_only: true
       - type: volume
