@@ -12,6 +12,7 @@ Free and Open Source (FOSS) software stacks run via docker compose.
 | [Paperless-ngx][paperless_ngx_homepage] | Content Management System | [Paperless-ngx source code][paperless_ngx_source_code] | [`GPLv3`][gplv3] |
 | [Portainer][portainer_homepage] | Software Management System | [Portainer source code][portainer_source_code] | [`zlib`][zlib] |
 | [RomM][romm_homepage] | Gaming | [RomM source code][romm_source_code] | [`AGPLv3`][agplv3] |
+| [Super Mario Odyssey Online (SMOO) Server][smoo_homepage] | Gaming | [Super Mario Odyssey Online (SMOO) Server source code][smoo_source_code] | `None` |
 
 
 ## Software Management System
@@ -42,6 +43,7 @@ Software stacks used as a dashboard.
 Software stacks used for gaming.
 
 - [RomM][romm_stack]
+- [Super Mario Odyssey Online (SMOO) Server][smoo_stack]
 
 
 ## Time Tracking
@@ -87,4 +89,7 @@ Software stacks used for serving webpages.
 [romm_homepage]: <https://romm.app/> "romm homepage"
 [romm_source_code]: <https://github.com/rommapp/romm> "romm source code"
 [romm_stack]: <./romm> "romm stack"
+[smoo_homepage]: <https://smoo.it/#/> "super mario online odyssey (smoo) server homepage"
+[smoo_source_code]: <https://github.com/Sanae6/SmoOnlineServer> "super mario online odyssey (smoo) server source code"
+[smoo_stack]: <./super-mario-odyssey-online-server> "super mario online odyssey (smoo) server stack"
 [zlib]: <https://choosealicense.com/licenses/zlib/> "Zlib License"
