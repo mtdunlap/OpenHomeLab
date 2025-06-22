@@ -4,7 +4,5 @@ flatpaks:
     id: com.discordapp.Discord
   - name: Flatseal
     id: com.github.tchx84.Flatseal
-  - name: Lutris
-    id: net.lutris.Lutris
   - name: Warehouse
     id: io.github.flattool.Warehouses

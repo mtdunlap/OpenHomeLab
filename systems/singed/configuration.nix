@@ -97,6 +97,14 @@
       librewolf
       chromium
       jellyfin-media-player
+      (lutris.override {
+        extraLibraries =  pkgs: [
+          # List library dependencies here
+        ];
+        extraPkgs = pkgs: [
+          # List package dependencies here
+        ];
+      })
     ];
   };
 
