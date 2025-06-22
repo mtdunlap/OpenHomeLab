@@ -62,10 +62,9 @@ networks:
   network:
     name: caddy-network
     driver: bridge
+    attachable: false
     external: false
     internal: false
-    enable_ipv4: true
-    enable_ipv6: false
   reverse-proxy:
     external: true
 
