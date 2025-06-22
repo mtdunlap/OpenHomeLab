@@ -1,0 +1,22 @@
+---
+model: virtual machine
+type: virtual machine
+bare_metal: false
+links: []
+hostname: sion
+hardware:
+  cpu:
+    cores: 2
+    threads: 4
+  gpu: null
+  memory:
+    bytes: 8_589_934_592
+  storage:
+    bytes: 53_687_091_200
+  networking:
+    - name: bridge for nixos
+      type: bridge
+      wireless: false
+  screen: null
+  battery: null
+  camera: null
