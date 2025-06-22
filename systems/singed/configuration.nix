@@ -82,6 +82,8 @@
     "discord"
     "steam"
     "steam-unwrapped"
+    "vscode"
+    "vscode-with-extensions"
   ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -92,7 +94,6 @@
     packages = with pkgs; [
       kdePackages.kate
       git
-      vscodium
       podman-compose
       moonlight-qt
       librewolf
@@ -105,6 +106,11 @@
         ];
         extraPkgs = pkgs: [
           # List package dependencies here
+        ];
+      })
+      (vscode-with-extensions.override {
+        vscodeExtensions = with vscode-extensions; [
+          # List vscode extensions here
         ];
       })
     ];
