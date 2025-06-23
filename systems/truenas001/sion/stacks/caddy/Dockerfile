@@ -8,3 +8,5 @@ RUN xcaddy build \
 FROM caddy:2.10.0@sha256:cd038960363e661b805a40ee6d03ba98608538f197c08cb915cb4af89e23a5b4
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+
+COPY ./Caddyfile /etc/caddy/Caddyfile
