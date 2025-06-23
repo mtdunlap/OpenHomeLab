@@ -1,0 +1,62 @@
+---
+name: qbittorrent
+
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.1.0@sha256:22dc2f60b6253356005b6cbb77ea282c788aa9ffb828ca61c43479735913e02c
+    container_name: qbittorrent
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-Etc/UTC}
+      #WEBUI_PORT: ${WEB_UI_PORT:-8080}
+      TORRENTING_PORT: ${TORRENTING_PORT:-6881}
+    expose:
+      - "8080"
+    hostname: qbittorrent
+    networks:
+      network: null
+      reverse-proxy: null
+    ports:
+      - name: torrenting port (tcp)
+        target: 6881
+        published: ${TORRENTING_PORT:-6881}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+      - name: torrenting port (udp)
+        target: 6881
+        published: ${TORRENTING_PORT:-6881}
+        host_ip: 0.0.0.0
+        protocol: udp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: config
+        target: /config
+        read_only: false
+      - type: volume
+        source: downloads
+        target: /downloads
+        read_only: false
+
+networks:
+  network:
+    name: qbittorrent-network
+    driver: bridge
+    attachable: true
+    external: false
+    internal: false
+
+volumes:
+  config:
+    name: qbittorrent-config
+    external: false
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/torrents"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+...
