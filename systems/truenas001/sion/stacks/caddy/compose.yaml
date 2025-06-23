@@ -7,8 +7,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: caddy
-    stdin_open: true
-    tty: true
     restart: unless-stopped
     environment:
       DUCKDNS_DOMAIN: ${DUCKDNS_DOMAIN?error}
