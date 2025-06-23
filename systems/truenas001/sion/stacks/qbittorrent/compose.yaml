@@ -10,20 +10,12 @@ services:
       PUID: ${PUID:-1000}
       PGID: ${PGID:-1000}
       TZ: ${TZ:-Etc/UTC}
-      WEBUI_PORT: ${WEB_UI_PORT:-8080}
       TORRENTING_PORT: ${TORRENTING_PORT:-6881}
     hostname: qbittorrent
     networks:
       network: null
-      #reverse-proxy: null
+      reverse-proxy: null
     ports:
-      - name: web ui
-        target: 8080
-        published: ${WEB_UI_PORT:-8080}
-        host_ip: 0.0.0.0
-        protocol: tcp
-        app_protocol: http
-        mode: host
       - name: torrenting port (tcp)
         target: 6881
         published: ${TORRENTING_PORT:-6881}
@@ -44,7 +36,7 @@ services:
         target: /config
         read_only: false
       - type: bind
-        source: ${DOWNLOAD_PATH?error}
+        source: downloads
         target: /downloads
         read_only: false
 
@@ -62,11 +54,11 @@ volumes:
   config:
     name: qbittorrent-configuration
     external: false
-  #downloads:
-  #  name: qbittorrent-downloads
-  #  external: false
-    #driver_opts:
-    #  type: cifs
-    #  device: "${DEVICE?error}/torrents"
-    #  o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000}"
+  downloads:
+    name: qbittorrent-downloads
+    external: false
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/torrents"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000}"
 ...
