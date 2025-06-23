@@ -4,7 +4,7 @@
             api_token {$DUCKDNS_TOKEN}
         }
         domains {
-            {$DUCKDNS_DOMAIN} jellyfin
+            {$DUCKDNS_DOMAIN} jellyfin kavita
         }
         ip_source simple_http https://ipv4.icanhazip.com/
         ip_source simple_http https://api.ipify.org
@@ -18,5 +18,12 @@
 jellyfin.{$DUCKDNS_DOMAIN}:443 {
     reverse_proxy {
         to jellyfin:8096
+    }
+}
+
+kavita.{$DUCKDNS_DOMAIN}:443 {
+    encode gzip
+    reverse_proxy {
+        to kavita:5000
     }
 }
