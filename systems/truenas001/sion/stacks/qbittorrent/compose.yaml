@@ -43,8 +43,8 @@ services:
         source: config
         target: /config
         read_only: false
-      - type: volume
-        source: downloads
+      - type: bind
+        source: ${DOWNLOAD_PATH?error}
         target: /downloads
         read_only: false
 
@@ -62,9 +62,9 @@ volumes:
   config:
     name: qbittorrent-configuration
     external: false
-  downloads:
-    name: qbittorrent-downloads
-    external: false
+  #downloads:
+  #  name: qbittorrent-downloads
+  #  external: false
     #driver_opts:
     #  type: cifs
     #  device: "${DEVICE?error}/torrents"
