@@ -35,7 +35,7 @@ services:
         source: config
         target: /config
         read_only: false
-      - type: bind
+      - type: volume
         source: downloads
         target: /downloads
         read_only: false
