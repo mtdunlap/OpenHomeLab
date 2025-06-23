@@ -15,7 +15,7 @@ services:
     hostname: qbittorrent
     networks:
       network: null
-      reverse-proxy: null
+      #reverse-proxy: null
     ports:
       - name: web ui
         target: 8080
