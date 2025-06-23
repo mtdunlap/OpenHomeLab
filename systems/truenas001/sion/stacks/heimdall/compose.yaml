@@ -1,0 +1,42 @@
+---
+name: heimdall
+
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:v2.6.3-ls310@sha256:729bf084bb2dbb7bb961ef8fa604f83ae1b8a036743b2357db5fe71bc6ee8089
+    container_name: heimdall
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-Etc/UTC}
+    expose:
+      - "80"
+      - "443"
+    hostname: heimdall
+    networks:
+      network: null
+      reverse-proxy: null
+    volumes:
+      - type: volume
+        source: config
+        target: /config
+        read_only: false
+
+networks:
+  network:
+    name: heimdall-network
+    driver: bridge
+    attachable: false
+    external: false
+    internal: false
+  reverse-proxy:
+    external: true
+
+volumes:
+  config:
+    name: heimdall-configuration
+    external: false
+    labels:
+      stacks.heimdall.volumes.config.description: heimdall configuration
+...
