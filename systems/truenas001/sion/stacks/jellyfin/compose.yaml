@@ -69,7 +69,7 @@ networks:
     driver: bridge
     attachable: false
     external: false
-    internal: true
+    internal: false
   reverse-proxy:
     external: true
 
