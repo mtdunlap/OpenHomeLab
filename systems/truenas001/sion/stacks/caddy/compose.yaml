@@ -45,10 +45,6 @@ services:
         app_protocol: http
         mode: host
     volumes:
-      - type: bind
-        source: Caddyfile
-        target: /etc/caddy/Caddyfile
-        read_only: true
       - type: volume
         source: config
         target: /config
