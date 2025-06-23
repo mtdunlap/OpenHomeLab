@@ -55,7 +55,10 @@ networks:
 
 volumes:
   config:
-    name: qbittorrent-config
+    name: qbittorrent-configuration
+    external: false
+  downloads:
+    name: qbittorrent-downloads
     external: false
     driver_opts:
       type: cifs
