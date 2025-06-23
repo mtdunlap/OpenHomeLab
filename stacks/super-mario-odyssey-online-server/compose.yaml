@@ -1,0 +1,44 @@
+---
+name: super-mario-odyssey-online-server
+
+services:
+  server:
+    image: ghcr.io/sanae6/smo-online-server${TAG:+:}${TAG}${DIGEST:+@}${DIGEST}
+    container_name: super-mario-odyssey-online-server
+    restart: unless-stopped
+    stdin_open: ${ATTACHABLE:-false}
+    tty: ${ATTACHABLE:-false}
+    hostname: super-mario-odyssey-online-server
+    networks:
+      network: null
+    ports:
+      - name: game port
+        target: 1027
+        published: ${GAME_PORT:-1027}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: idk
+        mode: host
+    volumes:
+      - type: volume
+        source: data
+        target: /data
+        read_only: false
+
+networks:
+  network:
+    name: super-mario-odyssey-online-server-network
+    driver: bridge
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+    attachable: false
+
+volumes:
+  data:
+    name: super-mario-odyssey-online-server-data
+    external: false
+    labels:
+      stacks.smoo.volumes.data.description: Server data
+...

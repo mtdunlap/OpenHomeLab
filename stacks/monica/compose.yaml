@@ -1,0 +1,95 @@
+---
+name: monica
+
+services:
+  monica:
+    image: monica:4.1.2-apache@sha256:b4b2cf68fbb4953112bf28aa24be89211abbb8dd26451ac791e7ce26f83724bc
+    container_name: monica
+    restart: unless-stopped
+    depends_on:
+      monica-db:
+        condition: service_healthy
+        required: true
+        restart: false
+    secrets:
+      - source: app-key
+        target: app-key
+      - source: mysql-password
+        target: password
+    environment:
+      APP_KEY_FILE: /run/secrets/app-key
+      DB_HOST: monica-db
+      DB_USERNAME: monica-web
+      DB_PASSWORD_FILE: /run/secrets/password
+    hostname: monica
+    networks:
+      network: null
+    ports:
+      - name: web ui
+        target: 80
+        published: ${WEB_UI_PORT:-8080}
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: data
+        target: /var/www/html/storage
+        read_only: false
+
+  monica-db:
+    image: mariadb:11.8.2-noble@sha256:1e669024fc94f626b9dc48bf47b29b5339cec203c28e61a3dc372991a345daf5
+    container_name: monica-db
+    restart: unless-stopped
+    healthcheck:
+      disable: false
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: 1m
+      start_interval: 10s
+      interval: 1m
+      timeout: 5s
+      retries: 3
+    secrets:
+      - source: mysql-password
+        target: password
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: monica
+      MYSQL_USER: monica-web
+      MYSQL_PASSWORD_FILE: /run/secrets/password
+    hostname: monica-db
+    networks:
+      network: null
+    volumes:
+      - type: volume
+        source: mysql
+        target: /var/lib/mysql
+        read_only: false
+
+networks:
+  network:
+    name: monica-network
+    driver: bridge
+    external: false
+    internal: false
+    attachable: false
+
+secrets:
+  app-key:
+    file: ./app-key.secret
+  mysql-password:
+    file: ./mysql-password.secret
+
+volumes:
+  data:
+    name: monica-data
+    external: false
+    labels:
+      stacks.monica.volumes.data.description: monica data
+  mysql:
+    name: monica-mysql
+    external: false
+    labels:
+      stacks.monica.volumes.mysql.description: monica mysql database
+...

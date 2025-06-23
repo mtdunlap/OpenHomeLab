@@ -1,0 +1,90 @@
+---
+name: jellyfin
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:10.10.7@sha256:a5fb220ce06edb8ef056a8e2a88bc04a6608d1cb7d49b7002ff4c858945566ad
+    container_name: jellyfin
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-Etc/UTC}
+    expose:
+      - "8096"
+      - "8920"
+    hostname: jellyfin
+    networks:
+      network: null
+      reverse-proxy: null
+    ports:
+      - name: client discovery
+        target: 7359
+        published: "7359"
+        host_ip: 0.0.0.0
+        protocol: udp
+        app_protocol: http
+        mode: host
+      - name: service discovery
+        target: 1900
+        published: "1900"
+        host_ip: 0.0.0.0
+        protocol: udp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: config
+        target: /config
+        read_only: false
+        volume:
+          nocopy: false
+      - type: volume
+        source: movies
+        target: /data/movies
+        read_only: true
+      - type: volume
+        source: music
+        target: /data/music
+        read_only: true
+      - type: volume
+        source: shows
+        target: /data/shows
+        read_only: true
+
+networks:
+  network:
+    name: jellyfin-network
+    driver: bridge
+    attachable: false
+    external: false
+    internal: false
+  reverse-proxy:
+    external: true
+
+volumes:
+  config:
+    name: jellyfin-config
+    external: false
+  movies:
+    name: jellyfin-data-movies
+    external: false
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/Movies"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+  music:
+    name: jellyfin-data-music
+    external: false
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/Music"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+  shows:
+    name: jellyfin-data-shows
+    external: false
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/Shows"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+...
