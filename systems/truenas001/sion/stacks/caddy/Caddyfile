@@ -4,7 +4,7 @@
             api_token {$DUCKDNS_TOKEN}
         }
         domains {
-            {$DUCKDNS_DOMAIN} @ jellyfin kavita portainer
+            {$DUCKDNS_DOMAIN} @ jellyfin kavita portainer qbittorrent
         }
         ip_source simple_http https://ipv4.icanhazip.com/
         ip_source simple_http https://api.ipify.org
@@ -41,5 +41,11 @@ portainer.{$DUCKDNS_DOMAIN}:443 {
             tls
             tls_insecure_skip_verify
         }
+    }
+}
+
+qbittorrent.{$DUCKDNS_DOMAIN}:443 {
+    reverse_proxy {
+        to qbittorrent:8080
     }
 }
