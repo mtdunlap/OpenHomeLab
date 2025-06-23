@@ -3,7 +3,7 @@ name: jellyfin
 
 services:
   jellyfin:
-    image: lscr.io/linuxserver/jellyfin${TAG:+:}${TAG}${DIGEST:+@}${DIGEST}
+    image: lscr.io/linuxserver/jellyfin:10.10.7@sha256:a5fb220ce06edb8ef056a8e2a88bc04a6608d1cb7d49b7002ff4c858945566ad
     container_name: jellyfin
     restart: unless-stopped
     environment:
