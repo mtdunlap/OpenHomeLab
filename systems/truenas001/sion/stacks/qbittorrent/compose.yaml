@@ -50,6 +50,8 @@ networks:
     attachable: true
     external: false
     internal: false
+  reverse-proxy:
+    external: true
 
 volumes:
   config:
