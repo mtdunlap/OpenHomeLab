@@ -10,25 +10,14 @@ services:
       PUID: ${PUID:-1000}
       PGID: ${PGID:-1000}
       TZ: ${TZ:-Etc/UTC}
+    expose:
+      - "8096"
+      - "8920"
     hostname: jellyfin
     networks:
       network: null
       reverse-proxy: null
     ports:
-      - name: web (http)
-        target: 8096
-        published: ${WEB_UI_PORT:-8096}
-        host_ip: 0.0.0.0
-        protocol: tcp
-        app_protocol: http
-        mode: host
-      - name: web (https)
-        target: 8920
-        published: ${WEB_UI_SECURE_PORT:-8920}
-        host_ip: 0.0.0.0
-        protocol: tcp
-        app_protocol: https
-        mode: host
       - name: client discovery
         target: 7359
         published: "7359"
