@@ -10,6 +10,7 @@ Free and Open Source (FOSS) software stacks run via docker compose.
 | [Jellyfin][jellyfin_homepage] | Content Management System | [Jellyfin source code][jellyfin_source_code] | [`GPLv2`][gplv2] |
 | [Kimai][kimai_homepage] | Time Tracking | [Kimai source code][kimai_source_code] | [`AGPLv3`][agplv3] |
 | [Kavita][kavita_homepage] | Content Management System | [Kavita source code][kavita_source_code] | [`GPLv3`][gplv3] |
+| [Monica][monica_homepage] | Content Management System | [Monica source code][monica_source_code] | [`AGPLv3`][agplv3] |
 | [Paperless-ngx][paperless_ngx_homepage] | Content Management System | [Paperless-ngx source code][paperless_ngx_source_code] | [`GPLv3`][gplv3] |
 | [Portainer][portainer_homepage] | Software Management System | [Portainer source code][portainer_source_code] | [`zlib`][zlib] |
 | [RomM][romm_homepage] | Gaming | [RomM source code][romm_source_code] | [`AGPLv3`][agplv3] |
@@ -30,6 +31,7 @@ Software stacks used for content management.
 - [Immich][immich_stack]
 - [Jellyfin][jellyfin_stack]
 - [Kavita][kavita_stack]
+- [Monica][monica_stack]
 - [Paperless-ngx][paperless_ngx_stack]
 
 
@@ -84,6 +86,9 @@ Software stacks used for serving webpages.
 [kavita_homepage]: <https://www.kavitareader.com/> "kavita homepage"
 [kavita_source_code]: <https://github.com/Kareadita/Kavita> "kavita source code"
 [kavita_stack]: <./kavita> "kavita stack"
+[monica_homepage]: <https://www.monicahq.com/> "monica homepage"
+[monica_source_code]: <https://github.com/monicahq/monica> "monica source code"
+[monica_stack]: <./monica> "monica stack"
 [paperless_ngx_homepage]: <https://docs.paperless-ngx.com/> "paperless-ngx homepage"
 [paperless_ngx_source_code]: <https://github.com/paperless-ngx/paperless-ngx> "paperless-ngx source code"
 [paperless_ngx_stack]: <./paperless-ngx> "paperless-ngx stack"
