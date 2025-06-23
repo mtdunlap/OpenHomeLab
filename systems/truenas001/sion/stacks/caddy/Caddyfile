@@ -4,7 +4,7 @@
             api_token {$DUCKDNS_TOKEN}
         }
         domains {
-            {$DUCKDNS_DOMAIN}
+            {$DUCKDNS_DOMAIN} jellyfin
         }
         ip_source simple_http https://ipv4.icanhazip.com/
         ip_source simple_http https://api.ipify.org
@@ -12,5 +12,11 @@
         check_interval 30m
         versions ipv4
         ttl 3h
+    }
+}
+
+jellyfin.{$DUCKDNS_DOMAIN}:443 {
+    reverse_proxy {
+        to jellyfin:8096
     }
 }
