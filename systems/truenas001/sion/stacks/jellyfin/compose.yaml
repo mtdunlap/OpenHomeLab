@@ -72,19 +72,19 @@ volumes:
     driver_opts:
       type: cifs
       device: "${DEVICE?error}/movies"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
   music:
     name: jellyfin-data-music
     external: false
     driver_opts:
       type: cifs
       device: "${DEVICE?error}/music"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
   shows:
     name: jellyfin-data-shows
     external: false
     driver_opts:
       type: cifs
       device: "${DEVICE?error}/shows"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
 ...
