@@ -22,6 +22,10 @@ services:
         target: /config
         read_only: false
       - type: volume
+        source: books
+        target: /data/books
+        read_only: true
+      - type: volume
         source: comics
         target: /data/comics
         read_only: true
@@ -46,6 +50,15 @@ volumes:
     external: false
     labels:
       stacks.kavita.volumes.config.description: kavita configuration
+  books:
+    name: kavita-books
+    external: false
+    labels:
+      stacks.kavita.volumes.books.description: kavita books
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/books"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
   comics:
     name: kavita-comics
     external: false
@@ -53,8 +66,8 @@ volumes:
       stacks.kavita.volumes.comics.description: kavita comics
     driver_opts:
       type: cifs
-      device: "${DEVICE?error}/Books/Comics"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      device: "${DEVICE?error}/comics"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
   manga:
     name: kavita-manga
     external: false
@@ -62,6 +75,6 @@ volumes:
       stacks.kavita.volumes.manga.description: kavita manga
     driver_opts:
       type: cifs
-      device: "${DEVICE?error}/Books/Manga"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      device: "${DEVICE?error}/manga"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
 ...
