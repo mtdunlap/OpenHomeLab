@@ -1,0 +1,15 @@
+---
+model: custom
+type: desktop
+bare_metal: true
+operating_system: TrueNAS SCALE Dragonfish-24.04.2
+links: []
+hostname: truenas000
+hardware:
+  cpu: null # to be written
+  gpu: null # to be written
+  memory: null # to be written
+  storage: null # to be written
+  screen: null
+  battery: null
+  camera: null

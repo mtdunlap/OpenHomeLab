@@ -1,0 +1,23 @@
+---
+model: virtual machine
+type: virtual machine
+bare_metal: false
+operating_system: Fedora Server 38
+links: []
+hostname: nautilus
+hardware:
+  cpu:
+    cores: 2
+    threads: 4
+  gpu: null
+  memory:
+    bytes: 1_073_741_824
+  storage:
+    bytes: 107_374_182_400
+  networking:
+    - name: bridge for nixos
+      type: bridge
+      wireless: false
+  screen: null
+  battery: null
+  camera: null
