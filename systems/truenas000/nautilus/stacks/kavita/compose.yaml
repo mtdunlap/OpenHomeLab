@@ -1,0 +1,80 @@
+---
+name: kavita
+
+services:
+  kavita:
+    image: lscr.io/linuxserver/kavita:v0.8.6.2-ls78@sha256:94e9a7030482e772ae5f8d7096c9e8356281e9b229ac73ba87fffd1334fdd0ee
+    container_name: kavita
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-Etc/UTC}
+    expose:
+      - "5000"
+    hostname: kavita
+    networks:
+      network: null
+      reverse-proxy: null
+    volumes:
+      - type: volume
+        source: config
+        target: /config
+        read_only: false
+      - type: volume
+        source: books
+        target: /data/books
+        read_only: true
+      - type: volume
+        source: comics
+        target: /data/comics
+        read_only: true
+      - type: volume
+        source: manga
+        target: /data/manga
+        read_only: true
+
+networks:
+  network:
+    name: kavita-network
+    driver: bridge
+    attachable: false
+    external: false
+    internal: false
+  reverse-proxy:
+    external: true
+
+volumes:
+  config:
+    name: kavita-configuration
+    external: false
+    labels:
+      stacks.kavita.volumes.config.description: kavita configuration
+  books:
+    name: kavita-books
+    external: false
+    labels:
+      stacks.kavita.volumes.books.description: kavita books
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/books"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
+  comics:
+    name: kavita-comics
+    external: false
+    labels:
+      stacks.kavita.volumes.comics.description: kavita comics
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/comics"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
+  manga:
+    name: kavita-manga
+    external: false
+    labels:
+      stacks.kavita.volumes.manga.description: kavita manga
+    driver_opts:
+      type: cifs
+      device: "${DEVICE?error}/manga"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
+...
