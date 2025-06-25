@@ -4,7 +4,7 @@
             api_token {$DUCKDNS_TOKEN}
         }
         domains {
-            {$DUCKDNS_DOMAIN} @ jellyfin kavita portainer
+            {$DUCKDNS_DOMAIN} jellyfin kavita
         }
         ip_source simple_http https://ipv4.icanhazip.com/
         ip_source simple_http https://api.ipify.org
@@ -12,12 +12,6 @@
         check_interval 30m
         versions ipv4
         ttl 3h
-    }
-}
-
-{$DUCKDNS_DOMAIN}:443 {
-    reverse_proxy {
-        to heimdall:80
     }
 }
 
@@ -31,15 +25,5 @@ kavita.{$DUCKDNS_DOMAIN}:443 {
     encode gzip
     reverse_proxy {
         to kavita:5000
-    }
-}
-
-portainer.{$DUCKDNS_DOMAIN}:443 {
-    reverse_proxy {
-        to portainer:9443
-        transport http {
-            tls
-            tls_insecure_skip_verify
-        }
     }
 }
