@@ -1,0 +1,8 @@
+---
+title: homepage
+description: My amazing homepage!
+theme: dark
+color: slate
+headerStyle: underlined
+language: en
+hideErrors: true

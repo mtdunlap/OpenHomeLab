@@ -1,0 +1,56 @@
+---
+- datetime:
+    locale: en-US
+    format:
+      weekday: long
+      year: numeric
+      month: 2-digit
+      day: 2-digit
+      hour: 2-digit
+      minute: 2-digit
+      timeZone: {{HOMEPAGE_VAR_TIMEZONE}}
+      timeZoneName: longGeneric
+
+- resources:
+    cpu: true
+    refresh: 1_000
+    expanded: false
+
+- resources:
+    cputemp: true
+    tempmin: 0
+    tempmax: 100
+    units: metric
+    refresh: 1_000
+    expanded: false
+
+- resources:
+    memory: true
+    refresh: 1_000
+    expanded: false
+
+- resources:
+    disk:
+      - /
+    diskUnits: bbytes
+    refresh: 3_600_000
+    expanded: false
+
+- resources:
+    network: true
+    refresh: 10_000
+    expanded: false
+
+- resources:
+    uptime: true
+    refresh: 60_000
+    expanded: false
+
+- openmeteo:
+    label: Home
+    latitude: {{HOMEPAGE_FILE_LATITUDE}}
+    longitude: {{HOMEPAGE_FILE_LONGITUDE}}
+    units: {{HOMEPAGE_VAR_TEMPERATURE_UNITS}}
+    cache: 5
+    format:
+      maximumFractionDigits: 1

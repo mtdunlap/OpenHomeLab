@@ -1,0 +1,87 @@
+---
+x-environment:
+  &environment
+  PUID: ${PUID:-1000}
+  PGID: ${PGID:-1000}
+  HOMEPAGE_ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+  HOMEPAGE_VAR_TIMEZONE: ${TIMEZONE:-Etc/UTC}
+  HOMEPAGE_VAR_TEMPERATURE_UNITS: ${TEMPERATURE_UNITS:-metric}
+  HOMEPAGE_FILE_LATITUDE: /run/secrets/latitude
+  HOMEPAGE_FILE_LONGITUDE: /run/secrets/longitude
+
+name: homepage
+
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:v1.3.2@sha256:4f923bf0e9391b3a8bc5527e539b022e92dcc8a3a13e6ab66122ea9ed030e196
+    container_name: homepage
+    restart: unless-stopped
+    environment:
+      <<: *environment
+    hostname: homepage
+    networks:
+      network: null
+    ports:
+      - name: web ui
+        target: 3000
+        published: "3000"
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    secrets:
+      - source: latitude
+        target: latitude
+      - source: longitude
+        target: longitude
+    volumes:
+      - type: bind
+        source: ./bookmarks.yaml
+        target: /app/config/bookmarks.yaml
+        read_only: true
+      - type: bind
+        source: ./services.yaml
+        target: /app/config/services.yaml
+        read_only: true
+      - type: bind
+        source: ./settings.yaml
+        target: /app/config/settings.yaml
+        read_only: true
+      - type: bind
+        source: ./widgets.yaml
+        target: /app/config/widgets.yaml
+        read_only: true
+      - type: volume
+        source: config
+        target: /app/config
+        read_only: false
+
+networks:
+  network:
+    name: homepage-network
+    driver: bridge
+    attachable: false
+    external: false
+    internal: false
+    enable_ipv4: true
+    enable_ipv6: false
+    labels:
+      stacks.homepage.networks.network.description: network for homepage
+
+secrets:
+  latitude:
+    file: ./latitude.secret
+    labels:
+      stacks.homepage.secrets.latitude.description: latitude for weather
+  longitude:
+    file: ./longitude.secret
+    labels:
+      stacks.homepage.secrets.longitude.description: longitude for weather
+
+volumes:
+  config:
+    name: homepage-configuration
+    external: false
+    labels:
+      stacks.homepage.volumes.config.description: configuration for homepage
+...
