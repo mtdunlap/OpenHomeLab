@@ -58,7 +58,7 @@ volumes:
     driver_opts:
       type: cifs
       device: "${DEVICE?error}/books"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
   comics:
     name: kavita-comics
     external: false
@@ -67,7 +67,7 @@ volumes:
     driver_opts:
       type: cifs
       device: "${DEVICE?error}/comics"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
   manga:
     name: kavita-manga
     external: false
@@ -76,5 +76,5 @@ volumes:
     driver_opts:
       type: cifs
       device: "${DEVICE?error}/manga"
-      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},ro"
+      o: "vers=3.0,username=${USERNAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro"
 ...
