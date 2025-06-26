@@ -1,0 +1,112 @@
+{
+  "$id": "https://github.com/mtdunlap/OpenHomeLab/schemas/romm/config.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RomM configuration",
+  "description": "Configuration for RomM as described by https://docs.romm.app/latest/Getting-Started/Configuration-File/",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "exclude": {
+      "description": "Exclude platforms to be scanned",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "platforms": {
+          "description": "Exclude entire platforms (folders) from being scanned.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "roms": {
+          "description": "Fine-tune which ROMs or files are excluded.",
+          "type": "object",
+          "required": [],
+          "properties": {
+            "single_file": {
+              "description": "Applies to ROMs that are single files (not in subfolders).",
+              "type": "object",
+              "required": [],
+              "properties": {
+                "extensions": {
+                  "description": "Exclude files by extension.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "names": {
+                  "description": "Exclude files by name or pattern (supports Unix wildcards).",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "multi_file": {
+              "description": "Applies to ROMs stored as folders (multi-disc, with DLC, etc.).",
+              "type": "object",
+              "properties": {
+                "names": {
+                  "description": "Exclude entire folders by name.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "parts": {
+                  "description": "Exclude specific files inside multi-file ROM folders.",
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "names": {
+                      "description": "Exclude files by name or pattern.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "extensions": {
+                      "description": "Exclude files by extension.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "system": {
+      "description": "Customize how RomM interprets your folder and platform names.",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "platforms": {
+          "description": "Map your custom folder names to RomM's recognized platform names.",
+          "type": "object"
+        },
+        "versions": {
+          "description": "Associate a platform with its main version. This also tells RomM to fetch medatata from the main version source.",
+          "type": "object"
+        }
+      }
+    },
+    "filesystem": {
+      "description": "Specify the folder name where your ROMs are located if it differs from the default.",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "roms_folder": {
+          "description": "The folder name where your roms are located.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
