@@ -34,13 +34,6 @@ services:
         condition: service_healthy
         restart: false
         required: true
-    healthcheck:
-      test: ["CMD", "wget", "-nv", "-t1", "--spider", "http://localhost:8080/api/heartbeat"]
-      start_period: 30s
-      start_interval: 10s
-      interval: 10s
-      timeout: 5s
-      retries: 5
     environment:
       <<: *web-environment
     hostname: romm-web
