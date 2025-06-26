@@ -2,20 +2,20 @@
 x-environment:
   db-environment:
     &db-environment
-    MARIADB_ROOT_PASSWORD_FILE: /run/secrets/romm-db-root-password
+    MARIADB_ROOT_PASSWORD: ${ROMM_DB_ROOT_PASSWORD?error}
     MARIADB_DATABASE: &db-name romm
     MARIADB_USER: &db-user romm-user
-    MARIADB_PASSWORD_FILE: /run/secrets/romm-db-user-password
+    MARIADB_PASSWORD: &db-password ${ROMM_DB_PASSWORD?error}
   web-environment:
     &web-environment
     TZ: ${TIME_ZONE:-Etc/UTC}
     DB_HOST: romm-db
     DB_NAME: *db-name
     DB_USER: *db-user
-    DB_PASSWD_FILE: /run/secrets/romm-db-user-password
-    ROMM_AUTH_SECRET_KEY_FILE: /run/secrets/romm-auth-secret-key
-    IGDB_CLIENT_ID_FILE: /run/secrets/igdb-client-id
-    IGDB_CLIENT_SECRET_FILE: /run/secrets/igdb-client-secret
+    DB_PASSWD: *db-password
+    ROMM_AUTH_SECRET_KEY: ${ROMM_AUTH_SECRET_KEY?error}
+    IGDB_CLIENT_ID: ${IGDB_CLIENT_ID?error}
+    IGDB_CLIENT_SECRET: ${IGDB_CLIENT_SECRET?error}
     DISABLE_EMULATOR_JS: false
     DISABLE_RUFFLE_RS: false
     KIOSK_MODE: true
@@ -55,15 +55,6 @@ services:
         protocol: tcp
         app_protocol: http
         mode: host
-    secrets:
-      - source: romm-db-user-password
-        target: romm-db-user-password
-      - source: romm-auth-secret-key
-        target: romm-auth-secret-key
-      - source: igdb-client-id
-        target: igdb-client-id
-      - source: igdb-client-secret
-        target: igdb-client-secret
     volumes:
       - type: volume
         source: resources
@@ -102,11 +93,6 @@ services:
     hostname: romm-db
     networks:
       internal-network: null
-    secrets:
-      - source: romm-db-root-password
-        target: romm-db-root-password
-      - source: romm-db-user-password
-        target: romm-db-user-password
     volumes:
       - type: volume
         source: database
@@ -127,18 +113,6 @@ networks:
     internal: true
     attachable: false
 
-secrets:
-  romm-auth-secret-key:
-    file: romm_auth_secret_key.secret
-  igdb-client-id:
-    file: igdb_client_id.secret
-  igdb-client-secret:
-    file: igdb_client_secret.secret
-  romm-db-root-password:
-    file: romm_db_root_password.secret
-  romm-db-user-password:
-    file: romm_db_user_password.secret
-
 volumes:
   database:
     name: romm-database
@@ -155,8 +129,8 @@ volumes:
   library:
     name: romm-library
     external: false
-    #driver: local
+    driver: local
     driver_opts:
       type: cifs
       device: ${DEVICE?error}/games
-      o: vers=3.0,username=${USER_NAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro
+      o: vers=3.0,username=${SAMBA_USER?error},password=${SAMBA_PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro
