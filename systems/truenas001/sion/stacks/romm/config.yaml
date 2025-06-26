@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mtdunlap/OpenHomeLab/refs/heads/main/schemas/romm/config.json
+exclude:
+  platforms: []
+  roms:
+    single_file:
+      extensions: []
+      names: []
+    multi_file:
+      names: []
+      parts:
+        names: []
+        extensions: []
+system:
+  platforms:
+    # Flash
+    flash: flash
+
+    # Atari
+    atari-2600: atari2600
+    atari-5200: atari5200
+    atari-7800: atari7800
+    atari-jaguar: jaguar
+    atari-lynx: lynx
+
+    # Microsoft
+    microsoft-xbox: xbox
+    microsoft-xbox-360: xbox360
+    microsoft-xbox-one: xboxone
+    microsoft-xbox-series: series-x
+
+    # NEC
+    nec-turbografx-16: turbografx16--1
+
+    # Nintendo
+    nintendo-entertainment-system: nes
+    nintendo-game-boy: gb
+    super-nintendo-entertainment-system: snes
+    nintendo-virtual-boy: virtualboy
+    nintendo-64: n64
+    nintendo-game-boy-color: gbc
+    nintendo-64dd: 64dd
+    nintendo-game-boy-advance: gba
+    nintendo-game-cube: ngc
+    nintendo-ds: nds
+    nintendo-wii: wii
+    nintendo-ds-i: nintendo-dsi
+    nintendo-3ds: 3ds
+    nintendo-wii-u: wiiu
+    nintendo-new-3ds: new-nintendo-3ds
+    nintendo-switch: switch
+
+    # Philips
+    philips-cd-i: philips-cd-i
+
+    # Sega
+    sega-master-system: sms
+    sega-genesis: genesis-slash-megadrive
+    sega-game-gear: gamegear
+    sega-cd: segacd
+    sega-32x: sega32
+    sega-saturn: saturn
+    sega-dreamcast: dc
+
+    # Sony
+    sony-playstation-1: ps
+    sony-playstation-2: ps2
+    sony-playstation-3: ps3
+    sony-playstation-4: ps4--1
+    sony-playstation-5: ps5
+    sony-playstation-portable: psp
+    sony-playstation-vita: psvita
+
+  versions: {}
+filesystem: {}
