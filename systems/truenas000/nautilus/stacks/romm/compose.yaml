@@ -1,0 +1,129 @@
+---
+x-environment:
+  db-environment:
+    &db-environment
+    MARIADB_ROOT_PASSWORD: ${ROMM_DB_ROOT_PASSWORD?error}
+    MARIADB_DATABASE: &db-name romm
+    MARIADB_USER: &db-user romm-user
+    MARIADB_PASSWORD: &db-password ${ROMM_DB_PASSWORD?error}
+  web-environment:
+    &web-environment
+    TZ: ${TIME_ZONE:-Etc/UTC}
+    DB_HOST: romm-db
+    DB_NAME: *db-name
+    DB_USER: *db-user
+    DB_PASSWD: *db-password
+    ROMM_AUTH_SECRET_KEY: ${ROMM_AUTH_SECRET_KEY?error}
+    IGDB_CLIENT_ID: ${IGDB_CLIENT_ID?error}
+    IGDB_CLIENT_SECRET: ${IGDB_CLIENT_SECRET?error}
+    DISABLE_EMULATOR_JS: false
+    DISABLE_RUFFLE_RS: false
+    KIOSK_MODE: true
+    ROMM_PORT: &romm-port "8080"
+    LOGLEVEL: INFO
+
+name: romm
+
+services:
+  web:
+    image: rommapp/romm:3.10.2@sha256:ccd6d93b7a18f1a0eb016dff03fb9fb62dc651ce2d33e63a0e941c87a6beec4e
+    container_name: romm-web
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: false
+        required: true
+    environment:
+      <<: *web-environment
+    hostname: romm-web
+    networks:
+      external-network: null
+      internal-network: null
+    ports:
+      - name: web ui
+        target: 8080
+        published: *romm-port
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    volumes:
+      - type: volume
+        source: resources
+        target: /romm/resources
+        read_only: false
+      - type: volume
+        source: redis
+        target: /redis-data
+        read_only: false
+      - type: volume
+        source: library
+        target: /romm/library
+        read_only: true
+      - type: volume
+        source: assets
+        target: /romm/assets
+        read_only: false
+      - type: bind
+        source: ./config.yaml
+        target: /romm/config/config.yml
+        read_only: true
+
+  db:
+    image: mariadb:11.8.2@sha256:781d5c901f78c9e5c87d2530b6a1a45a7cca139252c95d948697d245da3d8f87
+    container_name: romm-db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s
+      start_interval: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      <<: *db-environment
+    hostname: romm-db
+    networks:
+      internal-network: null
+    volumes:
+      - type: volume
+        source: database
+        target: /var/lib/mysql
+        read_only: false
+
+networks:
+  external-network:
+    name: romm-external-network
+    driver: bridge
+    external: false
+    internal: false
+    attachable: true
+  internal-network:
+    name: romm-internal-network
+    driver: bridge
+    external: false
+    internal: true
+    attachable: false
+
+volumes:
+  database:
+    name: romm-database
+    external: false
+  resources:
+    name: romm-resources
+    external: false
+  redis:
+    name: romm-redis
+    external: false
+  assets:
+    name: romm-assets
+    external: false
+  library:
+    name: romm-library
+    external: false
+    driver: local
+    driver_opts:
+      type: cifs
+      device: ${DEVICE?error}/games
+      o: vers=3.0,username=${SAMBA_USER?error},password=${SAMBA_PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro
