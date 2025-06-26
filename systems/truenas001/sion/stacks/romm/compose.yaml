@@ -1,0 +1,162 @@
+---
+x-environment:
+  db-environment:
+    &db-environment
+    MARIADB_ROOT_PASSWORD_FILE: /run/secrets/romm-db-root-password
+    MARIADB_DATABASE: &db-name romm
+    MARIADB_USER: &db-user romm-user
+    MARIADB_PASSWORD_FILE: /run/secrets/romm-db-user-password
+  web-environment:
+    &web-environment
+    TZ: ${TIME_ZONE:-Etc/UTC}
+    DB_HOST: romm-db
+    DB_NAME: *db-name
+    DB_USER: *db-user
+    DB_PASSWD_FILE: /run/secrets/romm-db-user-password
+    ROMM_AUTH_SECRET_KEY_FILE: /run/secrets/romm-auth-secret-key
+    IGDB_CLIENT_ID_FILE: /run/secrets/igdb-client-id
+    IGDB_CLIENT_SECRET_FILE: /run/secrets/igdb-client-secret
+    DISABLE_EMULATOR_JS: false
+    DISABLE_RUFFLE_RS: false
+    KIOSK_MODE: true
+    ROMM_PORT: &romm-port "8080"
+    LOGLEVEL: INFO
+
+name: romm
+
+services:
+  web:
+    image: rommapp/romm:3.10.2@sha256:ccd6d93b7a18f1a0eb016dff03fb9fb62dc651ce2d33e63a0e941c87a6beec4e
+    container_name: romm-web
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: false
+        required: true
+    healthcheck:
+      test: ["CMD", "wget", "-nv", "-t1", "--spider", "http://localhost:8080/api/heartbeat"]
+      start_period: 30s
+      start_interval: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      <<: *web-environment
+    hostname: romm-web
+    networks:
+      external-network: null
+      internal-network: null
+    ports:
+      - name: web ui
+        target: 8080
+        published: *romm-port
+        host_ip: 0.0.0.0
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    secrets:
+      - source: romm-db-user-password
+        target: romm-db-user-password
+      - source: romm-auth-secret-key
+        target: romm-auth-secret-key
+      - source: igdb-client-id
+        target: igdb-client-id
+      - source: igdb-client-secret
+        target: igdb-client-secret
+    volumes:
+      - type: volume
+        source: resources
+        target: /romm/resources
+        read_only: false
+      - type: volume
+        source: redis
+        target: /redis-data
+        read_only: false
+      - type: volume
+        source: library
+        target: /romm/library
+        read_only: true
+      - type: volume
+        source: assets
+        target: /romm/assets
+        read_only: false
+      - type: bind
+        source: ./config.yaml
+        target: /romm/config/config.yml
+        read_only: true
+
+  db:
+    image: mariadb:11.8.2@sha256:781d5c901f78c9e5c87d2530b6a1a45a7cca139252c95d948697d245da3d8f87
+    container_name: romm-db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s
+      start_interval: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      <<: *db-environment
+    hostname: romm-db
+    networks:
+      internal-network: null
+    secrets:
+      - source: romm-db-root-password
+        target: romm-db-root-password
+      - source: romm-db-user-password
+        target: romm-db-user-password
+    volumes:
+      - type: volume
+        source: database
+        target: /var/lib/mysql
+        read_only: false
+
+networks:
+  external-network:
+    name: romm-external-network
+    driver: bridge
+    external: false
+    internal: false
+    attachable: true
+  internal-network:
+    name: romm-internal-network
+    driver: bridge
+    external: false
+    internal: true
+    attachable: false
+
+secrets:
+  romm-auth-secret-key:
+    file: romm_auth_secret_key.secret
+  igdb-client-id:
+    file: igdb_client_id.secret
+  igdb-client-secret:
+    file: igdb_client_secret.secret
+  romm-db-root-password:
+    file: romm_db_root_password.secret
+  romm-db-user-password:
+    file: romm_db_user_password.secret
+
+volumes:
+  database:
+    name: romm-database
+    external: false
+  resources:
+    name: romm-resources
+    external: false
+  redis:
+    name: romm-redis
+    external: false
+  assets:
+    name: romm-assets
+    external: false
+  library:
+    name: romm-library
+    external: false
+    #driver: local
+    driver_opts:
+      type: cifs
+      device: ${DEVICE?error}/games
+      o: vers=3.0,username=${USER_NAME?error},password=${PASSWORD?error},uid=${PUID:-1000},gid=${PGID:-1000},soft,ro
