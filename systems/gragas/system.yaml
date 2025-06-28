@@ -1,0 +1,46 @@
+---
+system:
+  name: gragas
+  model: HP ZBook Studio G3
+  form_factor: laptop
+  links:
+    - https://support.hp.com/us-en/drivers/hp-zbook-studio-g3-mobile-workstation/8934839
+  operating_system: NixOS 25.05
+  hardware:
+    cpus:
+      - name: Intel Core i7-6820HQ
+        manufacturer: Intel Corporation
+        launch_date: 2015Q4
+        links:
+          - https://www.intel.com/content/www/us/en/products/sku/88970/intel-core-i76820hq-processor-8m-cache-up-to-3-60-ghz/specifications.html
+    gpus:
+      - name: Intel Corporation HD Graphics 530 (rev 06)
+        manufacturer: Intel Corporation
+        launch_date: 2015/09/01
+        links:
+          - https://www.techpowerup.com/gpu-specs/hd-graphics-530.c2789
+      - name: NVIDIA Coproration GM107GLM [Quadro M1000M] (rev a2)
+        manufacturer: NVIDIA Corporation
+        launch_date: 2015/08/18
+        links:
+          - https://www.techpowerup.com/gpu-specs/quadro-m1000m.c2739
+    memory:
+      - name: TEAMGROUP-SD4-2666
+        manufacturer: TEAMGROUP
+        launch_date: Unknown
+        links:
+          - &teamgroup-memory-product-page https://www.teamgroupinc.com/en/product-detail/memory/TEAMGROUP/elite-u-dimm-ddr4/elite-u-dimm-ddr4-TED432G2666C19DC01/
+          - &teamgroup-memory-spec-sheet https://images.teamgroupinc.com/products/memory/u-dimm/ddr4/elite/spec-sheet/elite-en.pdf
+      - name: TEAMGROUP-SD4-2666
+        manufacturer: TEAMGROUP
+        launch_date: Unknown
+        links:
+          - *teamgroup-memory-product-page
+          - *teamgroup-memory-spec-sheet
+    disks:
+      - name: SAMSUNG MZVKW512HMJP-000H1
+        manufacturer: SAMSUNG
+        launch_date: Unknown
+        links:
+          - https://smarthdd.com/database/SAMSUNG-MZVKW512HMJP-000H1/CXA73H0Q/
+          - https://www.techpowerup.com/ssd-specs/samsung-sm961-512-gb.d1214
