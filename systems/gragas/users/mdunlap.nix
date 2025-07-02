@@ -20,7 +20,6 @@
         packages = with pkgs; [
           podman-compose
           moonlight-qt
-          librewolf
           chromium
           jellyfin-media-player
           discord
@@ -35,12 +34,10 @@
           nixfmt-rfc-style
           (vscode-with-extensions.override {
             vscodeExtensions =
-              with vscode-extensions;
-              [
+              with vscode-extensions; [
                 # List vscode extensions here
                 jnoortheen.nix-ide
-              ]
-              ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+              ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
                 {
                   name = "vscode-containers";
                   publisher = "ms-azuretools";
