@@ -13,18 +13,18 @@
         # konsole
         # (lib.getBin qttools) # Expose qdbus in PATH
         # ark
-        elisa
-        gwenview
-        okular
-        kate
+        # elisa
+        # gwenview
+        # okular
+        # kate
         # khelpcenter
         # dolphin
         # baloo-widgets # baloo information in Dolphin
         # dolphin-plugins
-        spectacle
+        # spectacle
         # ffmpegthumbs
-        krdp
-        xwaylandvideobridge
+        # krdp
+        # xwaylandvideobridge
       ];
     };
   };
