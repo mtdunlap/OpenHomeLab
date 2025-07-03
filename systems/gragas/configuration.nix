@@ -13,6 +13,7 @@
   imports = [
     ./graphics-drivers/default.nix
     ./hardware-configuration.nix # Include the results of the hardware scan.
+    ./home-manager/default.nix
     ./localization/default.nix
     ./nix.nix
     ./networking/default.nix
