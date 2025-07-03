@@ -14,6 +14,7 @@
     ./graphics-drivers/default.nix
     ./hardware-configuration.nix # Include the results of the hardware scan.
     ./localization/default.nix
+    ./nix.nix
     ./networking/default.nix
     ./packages/default.nix
     ./services/default.nix
